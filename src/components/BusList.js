@@ -9,10 +9,11 @@ const BusList = ({ results }) => {
         showsHorizontalScrollIndicator={false}
         data={results}
         keyExtractor={bus => bus.id}
+        //remember to destructure below or that the important stuff is on instance.item
         renderItem={({ item: bus }) => {
           return (
             <View style={styles.busStyle}>
-              {console.log(bus.image_url)}
+              <Text>{bus.name}</Text>
               <Image
                 style={styles.imageStyle}
                 source={{ uri: bus.image_url }}
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   imageStyle: {
-    margin: 20,
+    margin: 5,
     flex: 1,
   },
 })

@@ -13,7 +13,7 @@ const SearchBar = ({ term, setTerm, searchApi }) => {
         autoCorrect={false}
         value={term}
         onChangeText={val => setTerm(val)}
-        onEndEditing={evt => searchApi()}
+        onEndEditing={evt => searchApi(term)}
       />
     </View>
   )
