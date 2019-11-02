@@ -42,6 +42,7 @@ export default () => {
           radius: 40000,
         },
       })
+
       //use params to append query string, this allows you to send info with a GET request
 
       setResults(res.data.businesses)
@@ -53,8 +54,9 @@ export default () => {
       console.log('messed up in searchApi')
     }
   }
+
   useEffect(() => {
     searchApi()
-  }, [])
+  }, []) //this is invoked when useResults() is called from SearchScreen
   return [searchApi, results, errorMessage]
 }

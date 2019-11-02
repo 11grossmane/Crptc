@@ -22,6 +22,7 @@ const SearchBar = ({ term, setTerm, searchApi }) => {
 const styles = StyleSheet.create({
   backgroundStyle: {
     marginTop: 10,
+    marginBottom: 1,
     backgroundColor: '#F0EEEE',
     height: 50,
     borderRadius: 5,

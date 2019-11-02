@@ -14,40 +14,31 @@ const SearchScreen = props => {
     })
   }
   return (
-    <View style={{ flex: 1 }}>
+    <>
+      {/* return grouping of elements without constrained view */}
       <SearchBar term={term} setTerm={setTerm} searchApi={searchApi} />
       {{ errorMessage } && <Text>{errorMessage}</Text>}
-      <Text>We have found {results.length} results</Text>
-      <Text>Cheap:</Text>
-
       <ScrollView>
         {results.length > 0 && (
-          <BusList
-            results={results.filter(bus => {
-              if (bus.price) return bus.price.length < 2
-            })}
-          />
+          <BusList title='Cheap' results={filterByPrice('$')} />
         )}
-        <Text>Pricier:</Text>
+
         {results.length > 0 && (
-          <BusList
-            results={results.filter(bus => {
-              if (bus.price) return bus.price.length === 2
-            })}
-          />
+          <BusList title='Pricier' results={filterByPrice('$$')} />
         )}
-        <Text>Expensive:</Text>
+
         {results.length > 0 && (
-          <BusList
-            results={results.filter(bus => {
-              if (bus.price) return bus.price.length > 2
-            })}
-          />
+          <BusList title='Priciest' results={filterByPrice('$$$')} />
         )}
       </ScrollView>
-    </View>
+    </>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  nameStyle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+})
 export default SearchScreen
