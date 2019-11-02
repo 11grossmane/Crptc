@@ -8,6 +8,11 @@ const SearchScreen = props => {
   const [term, setTerm] = useState('')
   const [searchApi, results, errorMessage] = useResults()
   //make sure to add flex 1 to thing containing scrollview if you want it to work
+  const filterByPrice = price => {
+    return results.filter(bus => {
+      if (bus.price === price) return bus
+    })
+  }
   return (
     <View style={{ flex: 1 }}>
       <SearchBar term={term} setTerm={setTerm} searchApi={searchApi} />
