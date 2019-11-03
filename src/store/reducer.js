@@ -6,13 +6,13 @@ export const toggleLi = bool => {
   return { type: TOGGLE_LI, loggedIn: bool }
 }
 
-const reducer = (state = {}, action) => {
+export const reducer = (loggedIn = false, action) => {
   switch (action.type) {
     case TOGGLE_LI:
-      return { ...state, loggedIn: action.loggedIn }
+      return action.loggedIn
 
     default:
-      return state
+      return loggedIn
   }
 }
 

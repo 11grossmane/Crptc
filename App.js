@@ -6,6 +6,7 @@ import SearchScreen from './src/screens/SearchScreen'
 import SingleRestScreen from './src/screens/SingleRestScreen'
 import Loading from './src/screens/Loading'
 import useLoggedIn from './src/hooks/useLoggedIn'
+import { UserProvider } from './src/context/UserContext'
 
 const navigator = createStackNavigator(
   {
@@ -21,4 +22,12 @@ const navigator = createStackNavigator(
   }
 )
 const Navigation = createAppContainer(navigator)
-export default Navigation
+const App = () => {
+  return (
+    <UserProvider>
+      <Navigation />
+    </UserProvider>
+  )
+}
+
+export default App

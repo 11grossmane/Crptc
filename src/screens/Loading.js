@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useReducer, useContext } from 'react'
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
 import useLoggedIn from '../hooks/useLoggedIn'
 import firebase from 'firebase'
 import firebaseConfig from '../../firebase-config'
-
+import logger from 'use-reducer-logger'
+import { reducer, toggleLi } from '../store/reducer'
+import UserContext from '../context/UserContext'
 const Loading = props => {
-  const { loggedIn, setLoggedIn } = useLoggedIn()
+  //const { loggedIn, setLoggedIn } = useLoggedIn()
+  const { loggedIn, setLoggedIn } = useContext(UserContext)
+  //   const [loggedIn, setLoggedIn] = useReducer(logger(reducer), false)
 
   useEffect(() => {
     console.log('in loading')
