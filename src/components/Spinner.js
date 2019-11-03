@@ -1,5 +1,6 @@
 import React from 'react'
 import firebase from 'firebase'
+import useLoggedIn from '../hooks/useLoggedIn'
 import {
   View,
   Text,

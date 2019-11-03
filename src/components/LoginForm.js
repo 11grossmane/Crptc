@@ -2,6 +2,8 @@ import React from 'react'
 import firebase from 'firebase'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 import { Card, CardSection, Button, Spinner } from './index'
+import { withNavigation } from 'react-navigation'
+import reducer, { toggleLi } from '../store/reducer'
 
 class LoginForm extends React.Component {
   constructor() {
@@ -32,6 +34,8 @@ class LoginForm extends React.Component {
 
   onLoginSuccess() {
     this.setState({ loading: false })
+    //this.props.navigation.navigate()
+    reducer.dispatch(toggleLi(true))
   }
 
   onLoginFail() {
@@ -46,6 +50,7 @@ class LoginForm extends React.Component {
             style={styles.inputStyle}
             autoCompleteType={'email'}
             placeholder='User Name'
+            importantforAutofill={true}
             autoCapitalize='none'
             autoCorrect={false}
             value={this.state.email}
@@ -56,6 +61,7 @@ class LoginForm extends React.Component {
           <TextInput
             style={styles.inputStyle}
             autoCompleteType={'password'}
+            importantforAutofill={true}
             secureTextEntry={true}
             placeholder='Password'
             autoCapitalize='none'
@@ -102,4 +108,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default LoginForm
+export default withNavigation(LoginForm)
