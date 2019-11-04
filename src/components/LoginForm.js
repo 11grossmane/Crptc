@@ -7,6 +7,10 @@ import useLoggedIn from '../hooks/useLoggedIn'
 import logger from 'use-reducer-logger'
 import { reducer, toggleLi } from '../store/reducer'
 import UserContext from '../context/UserContext'
+import * as GoogleSignin from 'expo-google-sign-in'
+import * as Google from 'expo-google-app-auth'
+import fireBaseConfig from '../../firebase-config'
+import firebaseConfig from '../../firebase-config'
 const LoginForm = props => {
   //const { loggedIn, setLoggedIn } = useLoggedIn()
   // const [loggedIn, setLoggedIn] = useReducer(logger(reducer), false)
@@ -16,6 +20,25 @@ const LoginForm = props => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  async function onGoogleButtonPress() {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId:
+          '706592017411-41r47odbpggj3a53j725717ehvept27k.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      })
+
+      if (result.type === 'success') {
+        onLoginSuccess()
+        return result.accessToken
+      } else {
+        return { cancelled: true }
+      }
+    } catch (e) {
+      onLoginFail()
+      return { error: true }
+    }
+  }
   function onButtonPress() {
     setError('')
     setLoading(true)
@@ -34,7 +57,7 @@ const LoginForm = props => {
 
   function onLoginSuccess() {
     setLoading(false)
-    setLoggedIn(false)
+    setLoggedIn(true)
   }
 
   function onLoginFail() {
@@ -77,8 +100,13 @@ const LoginForm = props => {
         {loading === true ? (
           <Spinner />
         ) : (
-          <Button onPress={onButtonPress}>Log in</Button>
+          <Button color='blue' onPress={onButtonPress}>
+            Log in
+          </Button>
         )}
+        <Button color='red' onPress={onGoogleButtonPress}>
+          Log in with Google
+        </Button>
       </CardSection>
     </Card>
   )
