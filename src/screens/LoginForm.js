@@ -1,71 +1,103 @@
-import React, { useState, useReducer, useContext } from 'react'
-import firebase from 'firebase'
+import React, { useState, useContext } from 'react'
+import { app, db } from '../../firebase-config'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
-import { Card, CardSection, Button, Spinner } from './index'
+import { Card, CardSection, Button, Spinner } from '../components/index'
 import { withNavigation } from 'react-navigation'
-import useLoggedIn from '../hooks/useLoggedIn'
-import logger from 'use-reducer-logger'
-import { reducer, toggleLi } from '../store/reducer'
+
 import UserContext from '../context/UserContext'
 import * as GoogleSignin from 'expo-google-sign-in'
 import * as Google from 'expo-google-app-auth'
-import fireBaseConfig from '../../firebase-config'
-import firebaseConfig from '../../firebase-config'
-const LoginForm = props => {
+
+const LoginForm = ({ navigation }) => {
   //const { loggedIn, setLoggedIn } = useLoggedIn()
   // const [loggedIn, setLoggedIn] = useReducer(logger(reducer), false)
-  const { loggedIn, setLoggedIn } = useContext(UserContext)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const { loggedIn, setLoggedIn, curUser, setCurUser } = useContext(UserContext)
+  //local state below because form
+  const [email, setEmail] = useState('phil@phil.com')
+  const [password, setPassword] = useState('phil123')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-
   async function onGoogleButtonPress() {
     try {
       const result = await Google.logInAsync({
         androidClientId:
-          '706592017411-41r47odbpggj3a53j725717ehvept27k.apps.googleusercontent.com',
+          '888787169491-k68gp3tmna1jvd3mcsq89p3c9n7g3chh.apps.googleusercontent.com',
         scopes: ['profile', 'email'],
       })
 
       if (result.type === 'success') {
-        onLoginSuccess()
+        onLoginSuccess(result)
         return result.accessToken
       } else {
         return { cancelled: true }
       }
     } catch (e) {
-      onLoginFail()
+      onLoginFail(e)
       return { error: true }
     }
   }
+
   function onButtonPress() {
     setError('')
     setLoading(true)
 
-    firebase
+    //adding user to auth db
+    app
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(onLoginSuccess)
+      .then(data => onLoginSuccess(data))
       .catch(() =>
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        //if there is an error signing in, create new user
+        app.auth().createUserWithEmailAndPassword(email, password)
       )
-      .then(onLoginSuccess)
-      .catch(onLoginFail)
+      .then(data => onLoginSuccess(data))
+      .catch(error => onLoginFail(error))
+
+    //adding user to firestore
     //this.setState({ loading: false })
   }
 
-  function onLoginSuccess() {
+  async function onLoginSuccess(data) {
+    const { user } = data
+
+    console.log('')
+    // for (let key in data) {
+    //   console.log(`${key}: ${data[key]}`)
+    // }
+    // db.collection('users').set({
+    let newUserRef = db.collection('users').doc(user.email)
+    await newUserRef.set(
+      {
+        name: user.email.split('@')[0],
+        email: user.email,
+      },
+      { merge: true }
+    )
+
+    const newUser = await newUserRef.get()
+    setCurUser(newUser)
+    //setCurUser(newUser)
+    //console.log('curUser', newUser)
     setLoading(false)
     setLoggedIn(true)
+    setError('')
+    navigation.navigate('RecentWords')
   }
 
-  function onLoginFail() {
+  function onLoginFail(error) {
+    console.log('error', error)
     setError('authentication error')
     setLoading(false)
-    setLoggedIn(false)
+    //setLoggedIn(false)
   }
-
+  console.log('rerendering login form')
+  if (loggedIn === true) {
+    return (
+      <CardSection>
+        <Button onPress={() => setLoggedIn(false)}>Log out</Button>
+      </CardSection>
+    )
+  }
   return (
     <Card>
       <CardSection>
@@ -101,7 +133,7 @@ const LoginForm = props => {
           <Spinner />
         ) : (
           <Button color='blue' onPress={onButtonPress}>
-            Log in
+            Log in/Signup
           </Button>
         )}
         <Button color='red' onPress={onGoogleButtonPress}>

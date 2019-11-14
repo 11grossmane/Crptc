@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Food",
-    "slug": "food",
+    "name": "Crptc",
+    "slug": "crptc",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": ["ios", "android", "web"],
@@ -21,7 +21,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "host.exp.exponent",
+      "package": "crptc.android",
       "googleServicesFile": "./google-services.json"
     }
   }
