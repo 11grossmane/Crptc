@@ -28,10 +28,9 @@ const navigator = createStackNavigator(
     SingleRest: SingleRestScreen,
     RecentWords,
     LoginForm,
-    ReactCarousel,
   },
   {
-    initialRouteName: 'ReactCarousel',
+    initialRouteName: 'Loading',
     defaultNavigationOptions: {
       title: 'Business Search',
     },

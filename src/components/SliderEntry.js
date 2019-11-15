@@ -14,15 +14,16 @@ export default class SliderEntry extends Component {
 
   get image() {
     const {
-      data: { illustration },
+      data: { image },
       parallax,
       parallaxProps,
       even,
     } = this.props
-
+    const random = Math.floor(Math.random() * 200 + 200)
+    console.log('TCL: image', image)
     return parallax ? (
       <ParallaxImage
-        source={{ uri: illustration }}
+        source={{ uri: image }}
         containerStyle={[
           styles.imageContainer,
           even ? styles.imageContainerEven : {},
@@ -34,22 +35,25 @@ export default class SliderEntry extends Component {
         {...parallaxProps}
       />
     ) : (
-      <Image source={{ uri: illustration }} style={styles.image} />
+      <Image
+        source={{ uri: `http://lorempixel.com/${random}/${random}/abstract/` }}
+        style={styles.image}
+      />
     )
   }
 
   render() {
     const {
-      data: { title, subtitle },
+      data: { value, timestamp, numComments },
       even,
     } = this.props
 
-    const uppercaseTitle = title ? (
+    const uppercaseTitle = value ? (
       <Text
         style={[styles.title, even ? styles.titleEven : {}]}
         numberOfLines={2}
       >
-        {title.toUpperCase()}
+        {value.toUpperCase()}
       </Text>
     ) : (
       false
@@ -59,9 +63,7 @@ export default class SliderEntry extends Component {
       <TouchableOpacity
         activeOpacity={1}
         style={styles.slideInnerContainer}
-        onPress={() => {
-          alert(`You've clicked '${title}'`)
-        }}
+        onPress={() => {}}
       >
         <View style={styles.shadow} />
         <View
@@ -80,7 +82,7 @@ export default class SliderEntry extends Component {
             style={[styles.subtitle, even ? styles.subtitleEven : {}]}
             numberOfLines={2}
           >
-            {subtitle}
+            Popularity: {numComments}
           </Text>
         </View>
       </TouchableOpacity>

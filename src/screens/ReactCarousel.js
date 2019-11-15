@@ -49,24 +49,24 @@ export default class example extends Component {
     return <SliderEntry data={item} even={true} />
   }
 
-  layoutExample(number, title, type) {
-    return (
-      <View style={styles.exampleContainer}>
-        <Text style={styles.title}>{`Example ${number}`}</Text>
-        <Text style={styles.subtitle}>Recent Words</Text>
-        <Carousel
-          data={ENTRIES2}
-          renderItem={this._renderLightItem}
-          sliderWidth={sliderWidth}
-          itemWidth={itemWidth}
-          containerCustomStyle={styles.slider}
-          contentContainerCustomStyle={styles.sliderContentContainer}
-          layout={type}
-          loop={true}
-        />
-      </View>
-    )
-  }
+  //   layoutExample(number, title, type) {
+  //     return (
+  //       <View style={styles.exampleContainer}>
+  //         <Text style={styles.title}>{`Example ${number}`}</Text>
+  //         <Text style={styles.subtitle}>Recent Words</Text>
+  //         <Carousel
+  //           data={ENTRIES2}
+  //           renderItem={this._renderLightItem}
+  //           sliderWidth={sliderWidth}
+  //           itemWidth={itemWidth}
+  //           containerCustomStyle={styles.slider}
+  //           contentContainerCustomStyle={styles.sliderContentContainer}
+  //           layout={type}
+  //           loop={true}
+  //         />
+  //       </View>
+  //     )
+  //   }
 
   render() {
     // const example4 = this.layoutExample(
