@@ -8,55 +8,18 @@ export default class SliderEntry extends Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
     even: PropTypes.bool,
-    parallax: PropTypes.bool,
-    parallaxProps: PropTypes.object,
-  }
-
-  get image() {
-    const {
-      data: { image },
-      parallax,
-      parallaxProps,
-      even,
-    } = this.props
-    const random = Math.floor(Math.random() * 200 + 200)
-    console.log('TCL: image', image)
-    return parallax ? (
-      <ParallaxImage
-        source={{ uri: image }}
-        containerStyle={[
-          styles.imageContainer,
-          even ? styles.imageContainerEven : {},
-        ]}
-        style={styles.image}
-        parallaxFactor={0.35}
-        showSpinner={true}
-        spinnerColor={even ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.25)'}
-        {...parallaxProps}
-      />
-    ) : (
-      <Image
-        source={{ uri: `http://lorempixel.com/${random}/${random}/abstract/` }}
-        style={styles.image}
-      />
-    )
   }
 
   render() {
     const {
-      data: { value, timestamp, numComments },
+      data: { value, image },
       even,
     } = this.props
 
-    const uppercaseTitle = value ? (
-      <Text
-        style={[styles.title, even ? styles.titleEven : {}]}
-        numberOfLines={2}
-      >
-        {value.toUpperCase()}
+    const uppercaseTitle = (
+      <Text style={styles.titleEven} numberOfLines={2}>
+        {value}
       </Text>
-    ) : (
-      false
     )
 
     return (
@@ -69,7 +32,7 @@ export default class SliderEntry extends Component {
         <View
           style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}
         >
-          {this.image}
+          <Image source={{ uri: image }} style={styles.image} />
           <View
             style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]}
           />
@@ -77,12 +40,9 @@ export default class SliderEntry extends Component {
         <View
           style={[styles.textContainer, even ? styles.textContainerEven : {}]}
         >
-          {uppercaseTitle}
-          <Text
-            style={[styles.subtitle, even ? styles.subtitleEven : {}]}
-            numberOfLines={2}
-          >
-            Popularity: {numComments}
+          <Text style={styles.title}>{value}</Text>
+          <Text style={styles.subtitle} numberOfLines={2}>
+            Posted: recent
           </Text>
         </View>
       </TouchableOpacity>

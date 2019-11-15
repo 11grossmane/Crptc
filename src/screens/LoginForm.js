@@ -13,8 +13,8 @@ const LoginForm = ({ navigation }) => {
   // const [loggedIn, setLoggedIn] = useReducer(logger(reducer), false)
   const { loggedIn, setLoggedIn, curUser, setCurUser } = useContext(UserContext)
   //local state below because form
-  const [email, setEmail] = useState('phil@phil.com')
-  const [password, setPassword] = useState('phil123')
+  const [email, setEmail] = useState('jovany_hilll@hotmail.com')
+  const [password, setPassword] = useState('yolo123')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   async function onGoogleButtonPress() {
@@ -58,30 +58,40 @@ const LoginForm = ({ navigation }) => {
   }
 
   async function onLoginSuccess(data) {
-    const { user } = data
-
-    console.log('')
-    // for (let key in data) {
-    //   console.log(`${key}: ${data[key]}`)
-    // }
-    // db.collection('users').set({
-    let newUserRef = db.collection('users').doc(user.email)
-    await newUserRef.set(
-      {
-        name: user.email.split('@')[0],
-        email: user.email,
-      },
-      { merge: true }
-    )
-
-    const newUser = await newUserRef.get()
-    setCurUser(newUser)
-    //setCurUser(newUser)
-    //console.log('curUser', newUser)
-    setLoading(false)
-    setLoggedIn(true)
-    setError('')
-    navigation.navigate('RecentWords')
+    if (data && data.user) {
+      try {
+        const { email, password } = data.user
+        const snapshot = await db
+          .collection('users')
+          .where('email', '==', email)
+          .get()
+        let snapData = snapshot.docs[0].data()
+        console.log('TCL: snapData', snapshot.docs[0].id)
+        let snapId = !snapshot.empty ? snapshot.docs[0].id : email
+        if (snapId === email) {
+          let newUser = await db
+            .collection('users')
+            .doc(`${snapId}`)
+            .set({
+              name: email.split('@')[0],
+              email,
+            })
+          snapData = newUser.data()
+        }
+        setCurUser({ ...snapData, id: snapId })
+        // setLoading(false)
+        // setLoggedIn(true)
+        // setError('')
+        navigation.navigate('RecentWords', {
+          curUser: {
+            ...snapData,
+            id: snapId,
+          },
+        })
+      } catch (e) {
+        console.error(e)
+      }
+    }
   }
 
   function onLoginFail(error) {

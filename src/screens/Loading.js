@@ -17,7 +17,7 @@ const Loading = props => {
     app.auth().onAuthStateChanged(user => {
       if (user) {
         setLoggedIn(true)
-        props.navigation.navigate('RecentWords')
+        props.navigation.navigate('LoginForm')
       } else {
         setLoggedIn(false)
         props.navigation.navigate('LoginForm')

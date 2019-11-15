@@ -18,7 +18,7 @@ import Carousel from 'react-native-snap-carousel'
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style'
 import SliderEntry from '../components/SliderEntry'
 import styles, { colors } from '../styles/index.style'
-const RecentWords = props => {
+const RecentWords = ({ navigation }) => {
   const {
     loggedIn,
     setLoggedIn,
@@ -27,23 +27,56 @@ const RecentWords = props => {
     curUser,
     setCurUser,
   } = useContext(UserContext)
+  const [userWords, setUserWords] = useState([])
+  //   const allWordsListener = async () => {
+  //     try {
+  //       let unsubscribe = await wordsRef.onSnapshot(snap => {
+  //         let arr = []
+  //         snap.forEach(doc => {
+  //           arr.push(doc.data())
+  //           console.log('TCL: doc.data()', doc.data())
+  //         })
+  //         setAllWords(arr)
 
-  useEffect(() => {
-    let wordsRef = db.collection('words')
-    let unsubscribe = wordsRef.onSnapshot(snap => {
-      let arr = []
-      snap.forEach(doc => {
-        arr.push(doc.data())
-        console.log('TCL: doc.data()', doc.data())
+  //         console.log('TCL: allWords', allWords)
+  //       })
+  //       return unsubscribe && unsubscribe()
+  //     } catch (e) {
+  //       console.error(e)
+  //     }
+  //   }
+  const queryUserWords = async () => {
+    try {
+      console.log(curUser.id)
+      const words = await db
+        .collection('words')
+        .where('userId', '==', +curUser.id)
+        .get()
+      const wordsArray = words.docs.map(doc => {
+        return doc.data()
       })
-      setAllWords(arr)
-
-      console.log('TCL: allWords', allWords)
-    })
-    return () => {
-      unsubscribe && unsubscribe()
+      console.log(wordsArray)
+      setUserWords(wordsArray)
+    } catch (e) {
+      console.error(e)
     }
-  }, [])
+  }
+  useEffect(() => {
+    if (curUser && curUser.id) {
+      console.log('TCL: curUser', curUser)
+
+      queryUserWords()
+      console.log(userWords)
+    } else {
+      let userData = navigation.getParam('curUser', 'NONE')
+      console.log('TCL: userData', userData)
+      setCurUser(userData)
+      queryUserWords()
+      console.log(userWords)
+    }
+
+    //return allWordsListener()
+  }, [curUser.id])
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -60,10 +93,10 @@ const RecentWords = props => {
           directionalLockEnabled={true}
         >
           <View style={styles.exampleContainer}>
-            <Text style={styles.title}>{`Example `}</Text>
-            <Text style={styles.subtitle}>Recent Words</Text>
+            <Text style={styles.title}>My Words</Text>
+            {/* <Text style={styles.subtitle}>Recent Words</Text> */}
             <Carousel
-              data={allWords}
+              data={userWords}
               renderItem={({ item }) => {
                 return <SliderEntry data={item} even={false} />
               }}

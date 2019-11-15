@@ -35,7 +35,7 @@ export default StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: 'transparent',
     color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: 40,
+    fontSize: 50,
     fontWeight: 'bold',
     textAlign: 'center',
   },
