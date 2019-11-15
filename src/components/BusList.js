@@ -2,22 +2,21 @@ import React from 'react'
 import { View, Text, Image, FlatList, StyleSheet } from 'react-native'
 import SingleBus from '../components/SingleBus'
 
-const BusList = props => {
-  const { results, title } = props
-  if (!results.length) {
+const BusList = ({ comments }) => {
+  const { value, likes, timestamp, userId, wordId, id } = comments
+  if (!comments.length) {
     return null
   }
   return (
     <View style={styles.containerStyle}>
-      <Text style={styles.titleStyle}>{title}</Text>
+      <Text style={styles.titleStyle}>{id}</Text>
       <FlatList
-        horizontal
         showsHorizontalScrollIndicator={false}
-        data={results}
-        keyExtractor={bus => bus.id}
+        data={comments}
+        keyExtractor={com => com.id}
         //remember to destructure below or that the important stuff is on instance.item
-        renderItem={({ item: bus }) => {
-          return <SingleBus bus={bus} />
+        renderItem={({ item: com }) => {
+          return <SingleBus com={com} />
         }}
       />
     </View>
@@ -38,6 +37,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     fontWeight: 'bold',
     fontSize: 18,
+    color: 'red',
   },
 })
 

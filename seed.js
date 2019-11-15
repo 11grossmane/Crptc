@@ -11,6 +11,8 @@ const adminApp = admin.initializeApp({
 })
 const db = adminApp.firestore()
 // Import seeds.
+
+const comments = []
 async function seed() {
   let userIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   for (let i = 0; i < 10; i++) {

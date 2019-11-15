@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect, useReducer, useContext } from 'react'
 import {
   View,
@@ -16,6 +17,7 @@ import UserContext from '../context/UserContext'
 import Carousel from 'react-native-snap-carousel'
 
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style'
+import BusList from '../components/BusList'
 import SliderEntry from '../components/SliderEntry'
 import styles, { colors } from '../styles/index.style'
 const RecentWords = ({ navigation }) => {
@@ -28,6 +30,7 @@ const RecentWords = ({ navigation }) => {
     setCurUser,
   } = useContext(UserContext)
   const [userWords, setUserWords] = useState([])
+  const [wordComments, setWordComments] = useState([])
   //   const allWordsListener = async () => {
   //     try {
   //       let unsubscribe = await wordsRef.onSnapshot(snap => {
@@ -45,6 +48,16 @@ const RecentWords = ({ navigation }) => {
   //       console.error(e)
   //     }
   //   }
+  const queryWordComments = async id => {
+    const comments = await db
+      .collection('comments')
+      .where('wordId', '==', +id)
+      .get()
+    return comments.docs.map(doc => {
+      console.log('docs data', doc.data(), doc.id)
+      return { ...doc.data(), id: doc.id }
+    })
+  }
   const queryUserWords = async () => {
     try {
       console.log(curUser.id)
@@ -52,15 +65,20 @@ const RecentWords = ({ navigation }) => {
         .collection('words')
         .where('userId', '==', +curUser.id)
         .get()
-      const wordsArray = words.docs.map(doc => {
-        return doc.data()
+
+      const wordsArray = words.docs.map(async doc => {
+        const comArray = await queryWordComments(doc.id)
+        return { ...doc.data(), id: +doc.id, comments: comArray }
       })
-      console.log(wordsArray)
-      setUserWords(wordsArray)
+      Promise.all(wordsArray).then(wordsArray => {
+        console.log('wordsArray', wordsArray)
+        setUserWords(wordsArray)
+      })
     } catch (e) {
       console.error(e)
     }
   }
+
   useEffect(() => {
     if (curUser && curUser.id) {
       console.log('TCL: curUser', curUser)
@@ -77,6 +95,17 @@ const RecentWords = ({ navigation }) => {
 
     //return allWordsListener()
   }, [curUser.id])
+
+  const onSnap = async ind => {
+    try {
+      console.log(ind)
+
+      setWordComments(userWords[ind].comments)
+      console.log('TCL: wordComments', wordComments)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -95,21 +124,26 @@ const RecentWords = ({ navigation }) => {
           <View style={styles.exampleContainer}>
             <Text style={styles.title}>My Words</Text>
             {/* <Text style={styles.subtitle}>Recent Words</Text> */}
-            <Carousel
-              data={userWords}
-              renderItem={({ item }) => {
-                return <SliderEntry data={item} even={false} />
-              }}
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              containerCustomStyle={styles.slider}
-              contentContainerCustomStyle={styles.sliderContentContainer}
-              layout={'tinder'}
-              loop={true}
-            />
+            {userWords.length > 0 && (
+              <Carousel
+                ref={c => (this.carousel = c)}
+                data={userWords}
+                renderItem={({ item }) => {
+                  return <SliderEntry data={item} even={false} />
+                }}
+                onSnapToItem={onSnap}
+                sliderWidth={sliderWidth}
+                itemWidth={itemWidth}
+                containerCustomStyle={styles.slider}
+                contentContainerCustomStyle={styles.sliderContentContainer}
+                layout={'tinder'}
+                loop={true}
+              />
+            )}
           </View>
         </ScrollView>
       </View>
+      {wordComments.length > 0 && <BusList comments={wordComments} />}
     </SafeAreaView>
   )
 }
