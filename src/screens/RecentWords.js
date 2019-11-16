@@ -66,14 +66,13 @@ const RecentWords = ({ navigation }) => {
         .where('userId', '==', +curUser.id)
         .get()
 
-      const wordsArray = words.docs.map(async doc => {
+      const wordsPromiseArray = words.docs.map(async doc => {
         const comArray = await queryWordComments(doc.id)
         return { ...doc.data(), id: +doc.id, comments: comArray }
       })
-      Promise.all(wordsArray).then(wordsArray => {
-        console.log('wordsArray', wordsArray)
-        setUserWords(wordsArray)
-      })
+      const wordsArray = await Promise.all(wordsPromiseArray)
+      console.log('wordsArray', wordsArray)
+      setUserWords(wordsArray)
     } catch (e) {
       console.error(e)
     }
@@ -99,7 +98,6 @@ const RecentWords = ({ navigation }) => {
   const onSnap = async ind => {
     try {
       console.log(ind)
-
       setWordComments(userWords[ind].comments)
       console.log('TCL: wordComments', wordComments)
     } catch (e) {

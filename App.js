@@ -36,7 +36,7 @@ const navigator = createStackNavigator(
   {
     initialRouteName: 'Loading',
     defaultNavigationOptions: {
-      title: 'Business Search',
+      title: 'Crptc',
     },
   }
 )

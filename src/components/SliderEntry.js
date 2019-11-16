@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import { ParallaxImage } from 'react-native-snap-carousel'
 import styles from '../styles/SliderEntry.style'
+import { random } from '../utils/random'
 
 export default class SliderEntry extends Component {
   static propTypes = {
@@ -15,7 +16,6 @@ export default class SliderEntry extends Component {
       data: { value, image },
       even,
     } = this.props
-
     const uppercaseTitle = (
       <Text style={styles.titleEven} numberOfLines={2}>
         {value}
@@ -32,7 +32,12 @@ export default class SliderEntry extends Component {
         <View
           style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}
         >
-          <Image source={{ uri: image }} style={styles.image} />
+          <Image
+            source={{
+              uri: `http://lorempixel.com/${random()}/${random()}/abstract/`,
+            }}
+            style={styles.image}
+          />
           <View
             style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]}
           />
