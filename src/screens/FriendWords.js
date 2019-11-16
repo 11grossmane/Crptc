@@ -40,7 +40,7 @@ const FriendWords = ({ navigation }) => {
   const queryWordComments = async id => {
     const comments = await db
       .collection('comments')
-      .where('wordId', '==', +id)
+      .where('wordId', '==', id)
       .get()
     return comments.docs.map(doc => {
       console.log('docs data', doc.data(), doc.id)
@@ -52,12 +52,12 @@ const FriendWords = ({ navigation }) => {
       console.log(curFriend.id)
       const words = await db
         .collection('words')
-        .where('userId', '==', +curFriend.id)
+        .where('userId', '==', curFriend.id)
         .get()
 
       const wordsArray = words.docs.map(async doc => {
         const comArray = await queryWordComments(doc.id)
-        return { ...doc.data(), id: +doc.id, comments: comArray }
+        return { ...doc.data(), id: doc.id, comments: comArray }
       })
       Promise.all(wordsArray).then(wordsArray => {
         console.log('wordsArray', wordsArray)

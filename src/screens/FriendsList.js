@@ -24,7 +24,7 @@ const FriendsList = ({ navigation }) => {
         .doc(`${cur}`)
         .get()
       console.log('one friend', friend.data())
-      return { ...friend.data(), id: +friend.id }
+      return { ...friend.data(), id: friend.id }
     })
     // eslint-disable-next-line no-undef
     const friendsArray = await Promise.all(friends)

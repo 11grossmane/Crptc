@@ -52,7 +52,7 @@ const RecentWords = ({ navigation }) => {
   const queryWordComments = async id => {
     const comments = await db
       .collection('comments')
-      .where('wordId', '==', +id)
+      .where('wordId', '==', id)
       .get()
     return comments.docs.map(doc => {
       console.log('docs data', doc.data(), doc.id)
@@ -64,12 +64,13 @@ const RecentWords = ({ navigation }) => {
       console.log(curUser.id)
       const words = await db
         .collection('words')
-        .where('userId', '==', +curUser.id)
+        .where('userId', '==', curUser.id.toString())
         .get()
 
       const wordsPromiseArray = words.docs.map(async doc => {
+        console.log('words dave', doc.id)
         const comArray = await queryWordComments(doc.id)
-        return { ...doc.data(), id: +doc.id, comments: comArray }
+        return { ...doc.data(), id: doc.id, comments: comArray }
       })
       const wordsArray = await Promise.all(wordsPromiseArray)
       console.log('wordsArray', wordsArray)
@@ -84,13 +85,13 @@ const RecentWords = ({ navigation }) => {
       console.log('TCL: curUser', curUser)
 
       queryUserWords()
-      console.log(userWords)
+      console.log('userWords', userWords)
     } else {
       let userData = navigation.getParam('curUser', 'NONE')
       console.log('TCL: userData', userData)
       setCurUser(userData)
       queryUserWords()
-      console.log(userWords)
+      console.log('userWords', userWords)
     }
 
     //return allWordsListener()

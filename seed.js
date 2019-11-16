@@ -14,7 +14,7 @@ const db = adminApp.firestore()
 
 const comments = []
 async function seed() {
-  let userIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  let userIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => `${num}yolo`)
   for (let i = 0; i < 10; i++) {
     let fakerEmail = faker.internet.email()
     let fakerName = `${fakerEmail.split('@')[0]}-${faker.lorem.word()}`
@@ -22,7 +22,7 @@ async function seed() {
     try {
       await db
         .collection('users')
-        .doc(`${i}`)
+        .doc(`${i}yolo`)
         .set(
           {
             name: fakerName.toLowerCase(),
@@ -41,7 +41,7 @@ async function seed() {
               value: faker.lorem.word(),
               timestamp: faker.date.past(),
               image: faker.image.abstract(),
-              userId: i,
+              userId: `${i}yolo`,
             },
             { merge: true }
           )
@@ -55,7 +55,7 @@ async function seed() {
             likes: Math.floor(Math.random() * 20 + 1),
             timestamp: faker.date.past(),
             userId: userIds[random],
-            wordId: i,
+            wordId: `${i}yolo`,
           },
           { merge: true }
         )

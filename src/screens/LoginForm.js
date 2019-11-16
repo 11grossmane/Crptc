@@ -13,7 +13,7 @@ const LoginForm = ({ navigation }) => {
   // const [loggedIn, setLoggedIn] = useReducer(logger(reducer), false)
   const { loggedIn, setLoggedIn, curUser, setCurUser } = useContext(UserContext)
   //local state below because form
-  const [email, setEmail] = useState('jovany_hilll@hotmail.com')
+  const [email, setEmail] = useState('glenna_reichel51@yahoo.com')
   const [password, setPassword] = useState('yolo123')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -66,7 +66,7 @@ const LoginForm = ({ navigation }) => {
           .where('email', '==', email)
           .get()
         let snapData = snapshot.docs[0].data()
-        console.log('TCL: snapData', snapshot.docs[0].id)
+
         let snapId = !snapshot.empty ? snapshot.docs[0].id : email
         if (snapId === email) {
           let newUser = await db
@@ -78,14 +78,14 @@ const LoginForm = ({ navigation }) => {
             })
           snapData = newUser.data()
         }
-        setCurUser({ ...snapData, id: snapId })
+        setCurUser({ ...snapData, id: snapId.toString() })
         // setLoading(false)
         // setLoggedIn(true)
         // setError('')
         navigation.navigate('RecentWords', {
           curUser: {
             ...snapData,
-            id: snapId,
+            id: snapId.toString(),
           },
         })
       } catch (e) {
