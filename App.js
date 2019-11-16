@@ -7,6 +7,8 @@ import SingleRestScreen from './src/screens/SingleRestScreen'
 import Loading from './src/screens/Loading'
 import RecentWords from './src/screens/RecentWords'
 import LoginForm from './src/screens/LoginForm'
+import FriendsList from './src/screens/FriendsList'
+import FriendWords from './src/screens/FriendWords'
 import useLoggedIn from './src/hooks/useLoggedIn'
 import ReactCarousel from './src/screens/ReactCarousel'
 import { UserProvider } from './src/context/UserContext'
@@ -28,6 +30,8 @@ const navigator = createStackNavigator(
     SingleRest: SingleRestScreen,
     RecentWords,
     LoginForm,
+    FriendsList,
+    FriendWords,
   },
   {
     initialRouteName: 'Loading',

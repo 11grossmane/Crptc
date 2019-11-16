@@ -24,6 +24,7 @@
     "firebase": "^7.3.0",
     "firebase-admin": "^8.7.0",
     "lodash.clone": "^4.5.0",
+    "native-base": "^2.13.8",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-dom": "16.8.3",

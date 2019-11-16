@@ -6,6 +6,7 @@ export const UserProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [allWords, setAllWords] = useState([])
   const [curUser, setCurUser] = useState({})
+  const [friends, setFriends] = useState({})
   return (
     <UserContext.Provider
       value={{
@@ -15,6 +16,8 @@ export const UserProvider = ({ children }) => {
         setAllWords,
         curUser,
         setCurUser,
+        friends,
+        setFriends,
       }}
     >
       {children}

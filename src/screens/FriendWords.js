@@ -20,7 +20,10 @@ import { sliderWidth, itemWidth } from '../styles/SliderEntry.style'
 import BusList from '../components/BusList'
 import SliderEntry from '../components/SliderEntry'
 import styles, { colors } from '../styles/index.style'
-const RecentWords = ({ navigation }) => {
+import { withNavigation } from 'react-navigation'
+const FriendWords = ({ navigation }) => {
+  const curFriend = navigation.getParam('friend', 'No Friend')
+  console.log('props are', curFriend)
   const {
     loggedIn,
     setLoggedIn,
@@ -29,25 +32,10 @@ const RecentWords = ({ navigation }) => {
     curUser,
     setCurUser,
   } = useContext(UserContext)
-  const [userWords, setUserWords] = useState([])
-  const [wordComments, setWordComments] = useState([])
-  //   const allWordsListener = async () => {
-  //     try {
-  //       let unsubscribe = await wordsRef.onSnapshot(snap => {
-  //         let arr = []
-  //         snap.forEach(doc => {
-  //           arr.push(doc.data())
-  //           console.log('TCL: doc.data()', doc.data())
-  //         })
-  //         setAllWords(arr)
 
-  //         console.log('TCL: allWords', allWords)
-  //       })
-  //       return unsubscribe && unsubscribe()
-  //     } catch (e) {
-  //       console.error(e)
-  //     }
-  //   }
+  const [friendWords, setFriendWords] = useState([])
+  const [friendWordComments, setFriendWordComments] = useState([])
+
   const queryWordComments = async id => {
     const comments = await db
       .collection('comments')
@@ -58,12 +46,12 @@ const RecentWords = ({ navigation }) => {
       return { ...doc.data(), id: doc.id }
     })
   }
-  const queryUserWords = async () => {
+  const queryFriendWords = async () => {
     try {
-      console.log(curUser.id)
+      console.log(curFriend.id)
       const words = await db
         .collection('words')
-        .where('userId', '==', +curUser.id)
+        .where('userId', '==', +curFriend.id)
         .get()
 
       const wordsArray = words.docs.map(async doc => {
@@ -72,40 +60,27 @@ const RecentWords = ({ navigation }) => {
       })
       Promise.all(wordsArray).then(wordsArray => {
         console.log('wordsArray', wordsArray)
-        setUserWords(wordsArray)
+        setFriendWords(wordsArray)
       })
     } catch (e) {
       console.error(e)
     }
   }
 
-  useEffect(() => {
-    if (curUser && curUser.id) {
-      console.log('TCL: curUser', curUser)
-
-      queryUserWords()
-      console.log(userWords)
-    } else {
-      let userData = navigation.getParam('curUser', 'NONE')
-      console.log('TCL: userData', userData)
-      setCurUser(userData)
-      queryUserWords()
-      console.log(userWords)
-    }
-
-    //return allWordsListener()
-  }, [curUser.id])
-
-  const onSnap = async ind => {
+  const onSnap = ind => {
     try {
       console.log(ind)
 
-      setWordComments(userWords[ind].comments)
-      console.log('TCL: wordComments', wordComments)
+      setFriendWordComments(friendWords[ind].comments)
     } catch (e) {
       console.error(e)
     }
   }
+
+  useEffect(() => {
+    console.log(curFriend)
+    queryFriendWords()
+  }, [])
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -122,12 +97,12 @@ const RecentWords = ({ navigation }) => {
           directionalLockEnabled={true}
         >
           <View style={styles.exampleContainer}>
-            <Text style={styles.title}>My Words</Text>
+            <Text style={styles.title}>{curFriend.name}</Text>
             {/* <Text style={styles.subtitle}>Recent Words</Text> */}
-            {userWords.length > 0 && (
+            {friendWords.length > 0 && (
               <Carousel
                 ref={c => (this.carousel = c)}
-                data={userWords}
+                data={friendWords}
                 renderItem={({ item }) => {
                   return <SliderEntry data={item} even={false} />
                 }}
@@ -141,9 +116,14 @@ const RecentWords = ({ navigation }) => {
               />
             )}
           </View>
-          {wordComments.length > 0 && <BusList comments={wordComments} />}
+          {friendWordComments.length > 0 && (
+            <BusList comments={friendWordComments} />
+          )}
           <Button onPress={() => navigation.navigate('FriendsList')}>
             Friends
+          </Button>
+          <Button onPress={() => navigation.navigate('RecentWords')}>
+            Home
           </Button>
         </ScrollView>
       </View>
@@ -151,4 +131,4 @@ const RecentWords = ({ navigation }) => {
   )
 }
 
-export default RecentWords
+export default withNavigation(FriendWords)
