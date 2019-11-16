@@ -13,7 +13,7 @@ const LoginForm = ({ navigation }) => {
   // const [loggedIn, setLoggedIn] = useReducer(logger(reducer), false)
   const { loggedIn, setLoggedIn, curUser, setCurUser } = useContext(UserContext)
   //local state below because form
-  const [email, setEmail] = useState('glenna_reichel51@yahoo.com')
+  const [email, setEmail] = useState('brigitte.maggio@gmail.com')
   const [password, setPassword] = useState('yolo123')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)

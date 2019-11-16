@@ -13,52 +13,57 @@ const db = adminApp.firestore()
 // Import seeds.
 
 const comments = []
+const names = []
 async function seed() {
   let userIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => `${num}yolo`)
   for (let i = 0; i < 10; i++) {
     let fakerEmail = faker.internet.email()
     let fakerName = `${fakerEmail.split('@')[0]}-${faker.lorem.word()}`
+    names.push(fakerName.toLowerCase())
+    let word = faker.lorem.word()
+    let sentence = faker.lorem.sentence()
     let random = Math.floor(Math.random() * 10)
     try {
       await db
         .collection('users')
-        .doc(`${i}yolo`)
+        .doc(fakerName.toLowerCase())
         .set(
           {
             name: fakerName.toLowerCase(),
             password: 'yolo123',
             email: fakerEmail.toLowerCase(),
-            friendIds: userIds,
+            friendIds: names,
           },
           { merge: true }
         )
-      for (let j = 0; j < 3; j++) {
+      for (let j = 0; j < 10; j++) {
         await db
           .collection('words')
-          .doc(`${i}${j}`)
+          .doc(word)
           .set(
             {
-              value: faker.lorem.word(),
+              value: word,
               timestamp: faker.date.past(),
               image: faker.image.abstract(),
-              userId: `${i}yolo`,
+              userId: names[Math.floor(Math.random() * names.length)],
+            },
+            { merge: true }
+          )
+
+        await db
+          .collection('comments')
+          .doc(sentence)
+          .set(
+            {
+              value: sentence,
+              likes: Math.floor(Math.random() * 20 + 1),
+              timestamp: faker.date.past(),
+              userId: fakerName.toLowerCase(),
+              wordId: word,
             },
             { merge: true }
           )
       }
-      await db
-        .collection('comments')
-        .doc(`${i}`)
-        .set(
-          {
-            value: faker.lorem.sentence(),
-            likes: Math.floor(Math.random() * 20 + 1),
-            timestamp: faker.date.past(),
-            userId: userIds[random],
-            wordId: `${i}yolo`,
-          },
-          { merge: true }
-        )
     } catch (err) {
       console.error(err)
     }
