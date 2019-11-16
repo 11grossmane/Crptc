@@ -18,6 +18,7 @@ import Carousel from 'react-native-snap-carousel'
 
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style'
 import BusList from '../components/BusList'
+import Foooter from '../components/Footer'
 import SliderEntry from '../components/SliderEntry'
 import styles, { colors } from '../styles/index.style'
 const RecentWords = ({ navigation }) => {
@@ -145,6 +146,7 @@ const RecentWords = ({ navigation }) => {
           </Button>
         </ScrollView>
       </View>
+      <Foooter />
     </SafeAreaView>
   )
 }

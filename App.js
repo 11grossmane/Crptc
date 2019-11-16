@@ -9,6 +9,7 @@ import RecentWords from './src/screens/RecentWords'
 import LoginForm from './src/screens/LoginForm'
 import FriendsList from './src/screens/FriendsList'
 import FriendWords from './src/screens/FriendWords'
+import Foooter from './src/components/Footer'
 import useLoggedIn from './src/hooks/useLoggedIn'
 import ReactCarousel from './src/screens/ReactCarousel'
 import { UserProvider } from './src/context/UserContext'
@@ -32,6 +33,7 @@ const navigator = createStackNavigator(
     LoginForm,
     FriendsList,
     FriendWords,
+    Foooter,
   },
   {
     initialRouteName: 'Loading',

@@ -21,6 +21,7 @@ import BusList from '../components/BusList'
 import SliderEntry from '../components/SliderEntry'
 import styles, { colors } from '../styles/index.style'
 import { withNavigation } from 'react-navigation'
+import Foooter from '../components/Footer'
 const FriendWords = ({ navigation }) => {
   const curFriend = navigation.getParam('friend', 'No Friend')
   console.log('props are', curFriend)
@@ -127,6 +128,7 @@ const FriendWords = ({ navigation }) => {
           </Button>
         </ScrollView>
       </View>
+      <Foooter />
     </SafeAreaView>
   )
 }

@@ -4,6 +4,7 @@ import { Container, Header, Content, List, ListItem, Text } from 'native-base'
 import UserContext from '../context/UserContext'
 import { db } from '../../firebase-config'
 import { withNavigation } from 'react-navigation'
+import Foooter from '../components/Footer'
 const FriendsList = ({ navigation }) => {
   const {
     loggedIn,
@@ -61,6 +62,7 @@ const FriendsList = ({ navigation }) => {
             })}
         </List>
       </Content>
+      <Foooter />
     </Container>
   )
 }
