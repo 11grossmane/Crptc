@@ -5,32 +5,9 @@ import UserContext from '../context/UserContext'
 import { db } from '../../firebase-config'
 import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
+import NativeHeader from '../components/NativeHeader'
 const FriendsList = ({ navigation }) => {
-  const {
-    loggedIn,
-    setLoggedIn,
-    allWords,
-    setAllWords,
-    curUser,
-    setCurUser,
-    friends,
-    setFriends,
-  } = useContext(UserContext)
-
-  const queryFriends = async () => {
-    const friends = curUser.friendIds.map(async cur => {
-      const friend = await db
-        .collection('users')
-        .doc(`${cur}`)
-        .get()
-      console.log('one friend', friend.data())
-      return { ...friend.data(), id: friend.id }
-    })
-    // eslint-disable-next-line no-undef
-    const friendsArray = await Promise.all(friends)
-    console.log('friendArray', friendsArray)
-    setFriends(friendsArray)
-  }
+  const { curUser, friends, queryFriends } = useContext(UserContext)
 
   useEffect(() => {
     console.log('curUser and friends', curUser, curUser.friendIds)
@@ -40,10 +17,9 @@ const FriendsList = ({ navigation }) => {
   }, [])
 
   return (
-    <Container>
-      <Header />
-      <Content>
-        <List>
+    <Container style={{ backgroundColor: 'black' }}>
+      <Content style={{ backgroundColor: 'black' }}>
+        <List style={{ backgroundColor: 'black' }}>
           {friends.length &&
             friends.map(friend => {
               return (
@@ -55,7 +31,7 @@ const FriendsList = ({ navigation }) => {
                       })
                     }}
                   >
-                    <Text>{friend.name}</Text>
+                    <Text style={{ color: 'white' }}>{friend.name}</Text>
                   </TouchableOpacity>
                 </ListItem>
               )

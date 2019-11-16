@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react'
+/* eslint-disable react/display-name */
+import React, { useEffect, useState } from 'react'
 import firebase from 'firebase'
+import { Text } from 'react-native'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import SearchScreen from './src/screens/SearchScreen'
@@ -10,11 +12,15 @@ import LoginForm from './src/screens/LoginForm'
 import FriendsList from './src/screens/FriendsList'
 import FriendWords from './src/screens/FriendWords'
 import Foooter from './src/components/Footer'
-import useLoggedIn from './src/hooks/useLoggedIn'
-import ReactCarousel from './src/screens/ReactCarousel'
+import NativeHeader from './src/components/NativeHeader'
 import { UserProvider } from './src/context/UserContext'
+import * as Font from 'expo-font'
+import { Ionicons } from '@expo/vector-icons'
+import { Icon } from 'native-base'
 import { YellowBox } from 'react-native'
+import { loadFont } from './src/utils/random'
 import clone from 'lodash.clone'
+import Header from './src/components/header'
 
 YellowBox.ignoreWarnings(['Setting a timer'])
 const _console = clone(console)
@@ -31,7 +37,14 @@ const navigator = createStackNavigator(
     SingleRest: SingleRestScreen,
     RecentWords,
     LoginForm,
-    FriendsList,
+    FriendsList: {
+      screen: FriendsList,
+      navigationOptions: {
+        headerTitle: () => {
+          return <Header headerText='Friends' />
+        },
+      },
+    },
     FriendWords,
     Foooter,
   },
@@ -42,12 +55,27 @@ const navigator = createStackNavigator(
     },
   }
 )
+// export const loadFont = async () => {
+//   await Font.loadAsync({
+//     Roboto: require('./fonts/Roboto.ttf'),
+//     Roboto_medium: require('./fonts/Roboto_medium.ttf'),
+//     ...Ionicons.font,
+//   })
+// }
 const Navigation = createAppContainer(navigator)
 const App = () => {
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    loadFont().then(() => setLoading(false))
+  }, [])
   return (
-    <UserProvider>
-      <Navigation />
-    </UserProvider>
+    !loading && (
+      <UserProvider>
+        <Navigation>
+          <Foooter />
+        </Navigation>
+      </UserProvider>
+    )
   )
 }
 

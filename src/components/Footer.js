@@ -15,19 +15,13 @@ class Foooter extends Component {
     return (
       <Footer>
         <FooterTab>
-          <Button>
-            <Icon name='apps' />
-          </Button>
-          <Button>
-            <Icon name='camera' />
-          </Button>
           <Button
             onPress={() => {
               this.props.navigation.navigate('RecentWords')
             }}
             active
           >
-            <Icon active name='navigate' />
+            <Icon name='home' />
           </Button>
           <Button
             onPress={() => {

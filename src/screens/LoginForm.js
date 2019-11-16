@@ -5,12 +5,9 @@ import { Card, CardSection, Button, Spinner } from '../components/index'
 import { withNavigation } from 'react-navigation'
 
 import UserContext from '../context/UserContext'
-import * as GoogleSignin from 'expo-google-sign-in'
 import * as Google from 'expo-google-app-auth'
 
 const LoginForm = ({ navigation }) => {
-  //const { loggedIn, setLoggedIn } = useLoggedIn()
-  // const [loggedIn, setLoggedIn] = useReducer(logger(reducer), false)
   const { loggedIn, setLoggedIn, curUser, setCurUser } = useContext(UserContext)
   //local state below because form
   const [email, setEmail] = useState('brigitte.maggio@gmail.com')
@@ -101,13 +98,13 @@ const LoginForm = ({ navigation }) => {
     //setLoggedIn(false)
   }
   console.log('rerendering login form')
-  if (loggedIn === true) {
-    return (
-      <CardSection>
-        <Button onPress={() => setLoggedIn(false)}>Log out</Button>
-      </CardSection>
-    )
-  }
+  // if (loggedIn === true) {
+  //   return (
+  //     <CardSection>
+  //       <Button onPress={() => setLoggedIn(false)}>Log out</Button>
+  //     </CardSection>
+  //   )
+  // }
   return (
     <Card>
       <CardSection>

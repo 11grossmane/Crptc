@@ -1,14 +1,16 @@
 import React from 'react'
 import { Text, View } from 'react-native'
+import { Icon } from 'native-base'
 
 // Make a component
 const Header = props => {
-  const { textStyle, viewStyle } = styles
+  const { textStyle, viewStyle, iconStyle } = styles
 
   return (
-    <View style={viewStyle}>
+    <>
       <Text style={textStyle}>{props.headerText}</Text>
-    </View>
+      <Icon style={iconStyle} name='md-contacts' />
+    </>
   )
 }
 
@@ -27,6 +29,10 @@ const styles = {
   },
   textStyle: {
     fontSize: 20,
+  },
+  iconStyle: {
+    padding: 2,
+    margin: 2,
   },
 }
 

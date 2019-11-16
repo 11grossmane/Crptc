@@ -1,17 +1,8 @@
 /* eslint-disable no-undef */
-import React, { useState, useEffect, useReducer, useContext } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native'
-import { db } from '../../firebase-config'
-import { Button, CardSection } from '../components/index'
-import WordComp from '../components/WordComp'
+import React, { useState, useEffect, useContext } from 'react'
+import { View, Text, ScrollView, SafeAreaView, StatusBar } from 'react-native'
+
+import { Button } from '../components/index'
 
 import UserContext from '../context/UserContext'
 import Carousel from 'react-native-snap-carousel'
@@ -20,17 +11,11 @@ import { sliderWidth, itemWidth } from '../styles/SliderEntry.style'
 import BusList from '../components/BusList'
 import Foooter from '../components/Footer'
 import SliderEntry from '../components/SliderEntry'
-import styles, { colors } from '../styles/index.style'
+import styles from '../styles/index.style'
+import NativeHeader from '../components/NativeHeader'
 const RecentWords = ({ navigation }) => {
-  const {
-    loggedIn,
-    setLoggedIn,
-    allWords,
-    setAllWords,
-    curUser,
-    setCurUser,
-  } = useContext(UserContext)
-  const [userWords, setUserWords] = useState([])
+  const { curUser, setCurUser, userWords, queryWords } = useContext(UserContext)
+
   const [wordComments, setWordComments] = useState([])
   //   const allWordsListener = async () => {
   //     try {
@@ -49,48 +34,18 @@ const RecentWords = ({ navigation }) => {
   //       console.error(e)
   //     }
   //   }
-  const queryWordComments = async id => {
-    const comments = await db
-      .collection('comments')
-      .where('wordId', '==', id)
-      .get()
-    return comments.docs.map(doc => {
-      console.log('docs data', doc.data(), doc.id)
-      return { ...doc.data(), id: doc.id }
-    })
-  }
-  const queryUserWords = async () => {
-    try {
-      console.log(curUser.id)
-      const words = await db
-        .collection('words')
-        .where('userId', '==', curUser.id.toString())
-        .get()
-
-      const wordsPromiseArray = words.docs.map(async doc => {
-        console.log('words dave', doc.id)
-        const comArray = await queryWordComments(doc.id)
-        return { ...doc.data(), id: doc.id, comments: comArray }
-      })
-      const wordsArray = await Promise.all(wordsPromiseArray)
-      console.log('wordsArray', wordsArray)
-      setUserWords(wordsArray)
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   useEffect(() => {
     if (curUser && curUser.id) {
       console.log('TCL: curUser', curUser)
 
-      queryUserWords()
+      queryWords(curUser)
       console.log('userWords', userWords)
     } else {
       let userData = navigation.getParam('curUser', 'NONE')
       console.log('TCL: userData', userData)
       setCurUser(userData)
-      queryUserWords()
+      queryWords(curUser)
       console.log('userWords', userWords)
     }
 
@@ -109,6 +64,7 @@ const RecentWords = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {/* <NativeHeader /> */}
       <View style={styles.container}>
         <StatusBar
           translucent={true}
@@ -142,9 +98,6 @@ const RecentWords = ({ navigation }) => {
             )}
           </View>
           {wordComments.length > 0 && <BusList comments={wordComments} />}
-          <Button onPress={() => navigation.navigate('FriendsList')}>
-            Friends
-          </Button>
         </ScrollView>
       </View>
       <Foooter />
