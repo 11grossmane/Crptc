@@ -1,13 +1,18 @@
 /* eslint-disable no-undef */
 import React, { useState } from 'react'
 import { db } from '../../firebase-config'
+import firebase from 'firebase'
+
+const firestore = firebase.firestore()
 
 const UserContext = React.createContext()
 
 export const UserProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [allWords, setAllWords] = useState([])
+  const [curWord, setCurWord] = useState('')
   const [curUser, setCurUser] = useState({})
+  const [curFriend, setCurFriend] = useState({})
   const [friends, setFriends] = useState({})
   const [userWords, setUserWords] = useState([])
   const [friendWords, setFriendWords] = useState([])
@@ -66,20 +71,59 @@ export const UserProvider = ({ children }) => {
     }
   }
 
+  const addWord = async (newWord, user) => {
+    const newWordData = {
+      value: newWord,
+      userId: user.id,
+    }
+    try {
+      await db
+        .collection('words')
+        .add({ ...newWordData, timestamp: firebase.firestore.Timestamp.now() })
+    } catch (e) {
+      console.error(e)
+      console.log('messed up in addWord query')
+    }
+  }
+
+  const addComment = async (com, user, word) => {
+    const commentData = {
+      value: com,
+      userId: user.id,
+      wordId: word.id,
+      likes: 0,
+    }
+    try {
+      db.collection('comments').add({
+        ...commentData,
+        timestamp: firebase.firestore.Timestamp.now(),
+      })
+    } catch (e) {
+      console.error(e)
+      console.log('messed up in addComment query')
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
         loggedIn,
         setLoggedIn,
+        curWord,
+        setCurWord,
         allWords,
         setAllWords,
         curUser,
         setCurUser,
+        curFriend,
+        setCurFriend,
         friends,
         queryFriends,
         userWords,
         friendWords,
         queryWords,
+        addWord,
+        addComment,
       }}
     >
       {children}

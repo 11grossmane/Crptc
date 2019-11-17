@@ -14,17 +14,24 @@ import SliderEntry from '../components/SliderEntry'
 import styles from '../styles/index.style'
 import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
+import CommentForm from '../components/CommentForm'
+import CommentList from '../components/CommentList'
 const FriendWords = ({ navigation }) => {
-  const curFriend = navigation.getParam('friend', 'No Friend')
   console.log('props are', curFriend)
-  const { queryWords, friendWords } = useContext(UserContext)
+  const {
+    queryWords,
+    friendWords,
+    setCurWord,
+    curFriend,
+    setCurFriend,
+  } = useContext(UserContext)
 
   const [friendWordComments, setFriendWordComments] = useState([])
 
   const onSnap = ind => {
     try {
       console.log(ind)
-
+      setCurWord(friendWords[ind])
       setFriendWordComments(friendWords[ind].comments)
     } catch (e) {
       console.error(e)
@@ -33,6 +40,7 @@ const FriendWords = ({ navigation }) => {
 
   useEffect(() => {
     console.log(curFriend)
+    setCurFriend(navigation.getParam('friend', 'No Friend'))
     queryWords(curFriend)
   }, [])
 
@@ -51,7 +59,7 @@ const FriendWords = ({ navigation }) => {
           directionalLockEnabled={true}
         >
           <View style={styles.exampleContainer}>
-            <Text style={styles.title}>{curFriend.name}</Text>
+            <Text style={styles.title}>{curFriend.name} is feeling crptc</Text>
             {/* <Text style={styles.subtitle}>Recent Words</Text> */}
             {friendWords.length > 0 && (
               <Carousel
@@ -70,8 +78,9 @@ const FriendWords = ({ navigation }) => {
               />
             )}
           </View>
+          <CommentForm />
           {friendWordComments.length > 0 && (
-            <BusList comments={friendWordComments} />
+            <CommentList comments={friendWordComments} />
           )}
         </ScrollView>
       </View>

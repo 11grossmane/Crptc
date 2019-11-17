@@ -19,7 +19,6 @@ class Foooter extends Component {
             onPress={() => {
               this.props.navigation.navigate('RecentWords')
             }}
-            active
           >
             <Icon name='home' />
           </Button>

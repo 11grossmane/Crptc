@@ -13,6 +13,8 @@ import Foooter from '../components/Footer'
 import SliderEntry from '../components/SliderEntry'
 import styles from '../styles/index.style'
 import NativeHeader from '../components/NativeHeader'
+import WordForm from '../components/WordForm'
+import CommentList from '../components/CommentList'
 const RecentWords = ({ navigation }) => {
   const { curUser, setCurUser, userWords, queryWords } = useContext(UserContext)
 
@@ -78,7 +80,8 @@ const RecentWords = ({ navigation }) => {
           directionalLockEnabled={true}
         >
           <View style={styles.exampleContainer}>
-            <Text style={styles.title}>My Words</Text>
+            <Text style={styles.subtitle}>My Words</Text>
+            <WordForm />
             {/* <Text style={styles.subtitle}>Recent Words</Text> */}
             {userWords.length > 0 && (
               <Carousel
@@ -97,7 +100,7 @@ const RecentWords = ({ navigation }) => {
               />
             )}
           </View>
-          {wordComments.length > 0 && <BusList comments={wordComments} />}
+          {wordComments.length > 0 && <CommentList comments={wordComments} />}
         </ScrollView>
       </View>
       <Foooter />

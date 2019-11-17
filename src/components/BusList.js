@@ -5,7 +5,7 @@ import SingleBus from '../components/SingleBus'
 const BusList = ({ comments }) => {
   const { value, likes, timestamp, userId, wordId, id } = comments
   if (!comments.length) {
-    return null
+    return <Text>Be the first to comment on this word!</Text>
   }
   return (
     <View style={styles.containerStyle}>

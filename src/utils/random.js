@@ -12,3 +12,12 @@ export const loadFont = async () => {
     ...Ionicons.font,
   })
 }
+
+export const accordionize = (comments, userId) => {
+  return comments.map(cur => {
+    return {
+      title: `${userId} says: ${cur.value.slice(0, 8)}...`,
+      content: cur.value,
+    }
+  })
+}
