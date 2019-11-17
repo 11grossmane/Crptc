@@ -60,7 +60,8 @@ const RecentWords = ({ navigation }) => {
     } else {
       let userData = navigation.getParam('curUser', 'NONE')
       console.log('TCL: userData', userData)
-      setCurUser(userData).then(() => queryWords(curUser))
+      setCurUser(userData)
+      queryWords(curUser)
 
       console.log('userWords', userWords)
     }
@@ -106,8 +107,8 @@ const RecentWords = ({ navigation }) => {
                 renderItem={({ item }) => {
                   return <SliderEntry data={item} even={false} />
                 }}
-                onBeforeSnapToItem={onSnap}
-                onLayout={onSnap}
+                onSnapToItem={onSnap}
+                //onLayout={onSnap}
                 sliderWidth={sliderWidth}
                 itemWidth={itemWidth}
                 containerCustomStyle={styles.slider}
