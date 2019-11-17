@@ -1,6 +1,13 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, ScrollView, SafeAreaView, StatusBar } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native'
 
 import { Button } from '../components/index'
 
@@ -16,7 +23,13 @@ import NativeHeader from '../components/NativeHeader'
 import WordForm from '../components/WordForm'
 import CommentList from '../components/CommentList'
 const RecentWords = ({ navigation }) => {
-  const { curUser, setCurUser, userWords, queryWords } = useContext(UserContext)
+  const {
+    curUser,
+    setCurUser,
+    userWords,
+    queryWords,
+    setCurFriend,
+  } = useContext(UserContext)
 
   const [wordComments, setWordComments] = useState([])
   //   const allWordsListener = async () => {
@@ -38,6 +51,7 @@ const RecentWords = ({ navigation }) => {
   //   }
 
   useEffect(() => {
+    setCurFriend({})
     if (curUser && curUser.id) {
       console.log('TCL: curUser', curUser)
 
@@ -46,8 +60,8 @@ const RecentWords = ({ navigation }) => {
     } else {
       let userData = navigation.getParam('curUser', 'NONE')
       console.log('TCL: userData', userData)
-      setCurUser(userData)
-      queryWords(curUser)
+      setCurUser(userData).then(() => queryWords(curUser))
+
       console.log('userWords', userWords)
     }
 
@@ -57,13 +71,15 @@ const RecentWords = ({ navigation }) => {
   const onSnap = async ind => {
     try {
       console.log(ind)
-      setWordComments(userWords[ind].comments)
+      const comments =
+        userWords[ind] && userWords ? userWords[ind].comments : []
+      setWordComments(comments)
       console.log('TCL: wordComments', wordComments)
     } catch (e) {
       console.error(e)
     }
   }
-
+  if (!curUser || !curUser.id) return <ActivityIndicator size='large' />
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* <NativeHeader /> */}
@@ -90,7 +106,8 @@ const RecentWords = ({ navigation }) => {
                 renderItem={({ item }) => {
                   return <SliderEntry data={item} even={false} />
                 }}
-                onSnapToItem={onSnap}
+                onBeforeSnapToItem={onSnap}
+                onLayout={onSnap}
                 sliderWidth={sliderWidth}
                 itemWidth={itemWidth}
                 containerCustomStyle={styles.slider}
@@ -100,7 +117,9 @@ const RecentWords = ({ navigation }) => {
               />
             )}
           </View>
-          {wordComments.length > 0 && <CommentList comments={wordComments} />}
+          {wordComments && (
+            <CommentList comments={wordComments} userType='curUser' />
+          )}
         </ScrollView>
       </View>
       <Foooter />

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Form, Item, Button, Label, Input, Text, Content } from 'native-base'
+import { KeyboardAvoidingView } from 'react-native'
 import UserContext from '../context/UserContext'
 const CommentForm = props => {
   const { curUser, curFriend, curWord, queryWords, addComment } = useContext(
@@ -12,10 +13,11 @@ const CommentForm = props => {
     setNewComment('')
   }
   return (
+    // <KeyboardAvoidingView behavior='padding' enabled>
     <Content>
       <Form>
         <Text style={{ color: 'white' }}>
-          {curUser.name} is {curWord.value} because...
+          {curUser.name} is feeling {curWord.value} because...
         </Text>
         <Item fixedLabel>
           <Input
@@ -25,16 +27,17 @@ const CommentForm = props => {
             value={newComment}
             onChangeText={val => setNewComment(val)}
           />
+          <Button
+            onPress={() => {
+              submitComment()
+            }}
+          >
+            <Text style={{ color: 'white' }}>Post</Text>
+          </Button>
         </Item>
       </Form>
-      <Button
-        onPress={() => {
-          submitComment()
-        }}
-      >
-        <Text style={{ color: 'white' }}>Post</Text>
-      </Button>
     </Content>
+    // </KeyboardAvoidingView>
   )
 }
 

@@ -1,6 +1,13 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect, useReducer, useContext } from 'react'
-import { View, Text, ScrollView, SafeAreaView, StatusBar } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native'
 import { db } from '../../firebase-config'
 import { Button } from '../components/index'
 import WordComp from '../components/WordComp'
@@ -22,6 +29,7 @@ const FriendWords = ({ navigation }) => {
     queryWords,
     friendWords,
     setCurWord,
+    curWord,
     curFriend,
     setCurFriend,
   } = useContext(UserContext)
@@ -31,8 +39,10 @@ const FriendWords = ({ navigation }) => {
   const onSnap = ind => {
     try {
       console.log(ind)
-      setCurWord(friendWords[ind])
-      setFriendWordComments(friendWords[ind].comments)
+      if (friendWords[ind] && friendWords[ind].comments) {
+        setCurWord(friendWords[ind])
+        setFriendWordComments(friendWords[ind].comments)
+      }
     } catch (e) {
       console.error(e)
     }
@@ -44,6 +54,9 @@ const FriendWords = ({ navigation }) => {
     queryWords(curFriend)
   }, [])
 
+  if (!curFriend || !curFriend.id) {
+    return <ActivityIndicator size='large' />
+  }
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -59,16 +72,19 @@ const FriendWords = ({ navigation }) => {
           directionalLockEnabled={true}
         >
           <View style={styles.exampleContainer}>
-            <Text style={styles.title}>{curFriend.name} is feeling crptc</Text>
+            <Text style={styles.subtitle}>
+              {curFriend.name} is feeling crptc
+            </Text>
             {/* <Text style={styles.subtitle}>Recent Words</Text> */}
-            {friendWords.length > 0 && (
+            {friendWords.length > 0 ? (
               <Carousel
                 ref={c => (this.carousel = c)}
                 data={friendWords}
                 renderItem={({ item }) => {
                   return <SliderEntry data={item} even={false} />
                 }}
-                onSnapToItem={onSnap}
+                onBeforeSnapToItem={onSnap}
+                //onLayout={onSnap}
                 sliderWidth={sliderWidth}
                 itemWidth={itemWidth}
                 containerCustomStyle={styles.slider}
@@ -76,11 +92,13 @@ const FriendWords = ({ navigation }) => {
                 layout={'tinder'}
                 loop={true}
               />
+            ) : (
+              <ActivityIndicator size='large' />
             )}
           </View>
           <CommentForm />
-          {friendWordComments.length > 0 && (
-            <CommentList comments={friendWordComments} />
+          {friendWordComments && (
+            <CommentList comments={friendWordComments} userType='friend' />
           )}
         </ScrollView>
       </View>

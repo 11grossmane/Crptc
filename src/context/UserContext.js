@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 import { db } from '../../firebase-config'
 import firebase from 'firebase'
 
-const firestore = firebase.firestore()
-
 const UserContext = React.createContext()
 
 export const UserProvider = ({ children }) => {
@@ -49,13 +47,14 @@ export const UserProvider = ({ children }) => {
       const words = await db
         .collection('words')
         .where('userId', '==', user.id)
+        .orderBy('timestamp', 'desc')
         .get()
 
       //call map to create an array of promises
       const wordsPromiseArray = words.docs.map(async doc => {
         console.log('words dave', doc.id)
         const comArray = await queryComments(doc.id)
-        return { ...doc.data(), id: doc.id, comments: comArray }
+        return { ...doc.data(), id: doc.id, comments: comArray || [] }
       })
 
       //use await promise.all to make sure they are resolved before setting user words
@@ -87,10 +86,12 @@ export const UserProvider = ({ children }) => {
   }
 
   const addComment = async (com, user, word) => {
+    console.log('TCL: word inside add comment', word)
+
     const commentData = {
       value: com,
       userId: user.id,
-      wordId: word.id,
+      wordId: `${word.id}`,
       likes: 0,
     }
     try {
@@ -102,6 +103,15 @@ export const UserProvider = ({ children }) => {
       console.error(e)
       console.log('messed up in addComment query')
     }
+  }
+
+  const addLike = async commentId => {
+    await db
+      .collection('comments')
+      .doc(`${commentId}`)
+      .update({
+        likes: firebase.firestore.FieldValue.increment(1),
+      })
   }
 
   return (
@@ -124,6 +134,7 @@ export const UserProvider = ({ children }) => {
         queryWords,
         addWord,
         addComment,
+        addLike,
       }}
     >
       {children}

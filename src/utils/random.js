@@ -13,11 +13,11 @@ export const loadFont = async () => {
   })
 }
 
-export const accordionize = (comments, userId) => {
+export const accordionize = comments => {
   return comments.map(cur => {
     return {
-      title: `${userId} says: ${cur.value.slice(0, 8)}...`,
-      content: cur.value,
+      title: `${cur.userId} says: ${cur.value.slice(0, 8)}...`,
+      content: cur,
     }
   })
 }
