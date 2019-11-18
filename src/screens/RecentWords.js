@@ -37,17 +37,14 @@ const RecentWords = ({ navigation }) => {
     setCurFriend({})
     if (curUser && curUser.id) {
       console.log('TCL: curUser', curUser)
-
-      queryWords(curUser)
       console.log('userWords', userWords)
     } else {
       let userData = navigation.getParam('curUser', 'NONE')
       console.log('TCL: userData', userData)
       setCurUser(userData)
-      queryWords(curUser)
-
       console.log('userWords', userWords)
     }
+    queryWords(curUser, 0)
 
     //return allWordsListener()
   }, [])
@@ -55,9 +52,9 @@ const RecentWords = ({ navigation }) => {
   const onSnap = async ind => {
     try {
       console.log(ind)
-      const comments =
-        userWords[ind] && userWords ? userWords[ind].comments : []
-      setWordComments(comments)
+      if (userWords.length) {
+        setCurWord(userWords[ind])
+      }
       console.log('TCL: wordComments', wordComments)
     } catch (e) {
       console.error(e)
@@ -101,9 +98,7 @@ const RecentWords = ({ navigation }) => {
               />
             )}
           </View>
-          {wordComments && (
-            <CommentList comments={wordComments} userType='curUser' />
-          )}
+          {curWord === true && <CommentList userType='curUser' />}
         </ScrollView>
       </View>
       <Foooter />

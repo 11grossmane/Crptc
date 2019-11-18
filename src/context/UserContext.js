@@ -14,6 +14,7 @@ export const UserProvider = ({ children }) => {
   const [friends, setFriends] = useState({})
   const [userWords, setUserWords] = useState([])
   const [friendWords, setFriendWords] = useState([])
+  const [curComments, setCurComments] = useState([])
 
   const queryFriends = async () => {
     const friends = curUser.friendIds.map(async cur => {
@@ -30,18 +31,28 @@ export const UserProvider = ({ children }) => {
     setFriends(friendsArray)
   }
   const queryComments = async id => {
-    const comments = await db
-      .collection('comments')
-      .where('wordId', '==', id)
-      .orderBy('timestamp', 'desc')
-      .get()
-    return comments.docs.map(doc => {
-      console.log('docs data', doc.data(), doc.id)
-      return { ...doc.data(), id: doc.id }
-    })
+    try {
+      const comments = await db
+        .collection('comments')
+        .where('wordId', '==', id)
+        .orderBy('timestamp', 'desc')
+        .get()
+      const updated = comments.docs.map(doc => {
+        console.log('docs data', doc.data(), doc.id)
+        return { ...doc.data(), id: doc.id }
+      })
+      if (returning) {
+        return updated
+      } else {
+        setCurComments(updated)
+      }
+    } catch (e) {
+      console.error(e)
+      console.log('messed up in queryFriends')
+    }
   }
 
-  const queryWords = async user => {
+  const queryWords = async (user, ind) => {
     if (!user.id) return
     try {
       console.log(user.id)
@@ -54,12 +65,13 @@ export const UserProvider = ({ children }) => {
       //call map to create an array of promises
       const wordsPromiseArray = words.docs.map(async doc => {
         console.log('words dave', doc.id)
-        const comArray = await queryComments(doc.id)
+        const comArray = await queryComments(doc.id, true)
         return { ...doc.data(), id: doc.id, comments: comArray || [] }
       })
 
       //use await promise.all to make sure they are resolved before setting user words
       const wordsArray = await Promise.all(wordsPromiseArray)
+      if (ind === 0) setCurWord(wordsArray[0])
       console.log('wordsArray', wordsArray)
       if (curUser.id === user.id) {
         setUserWords(wordsArray)
@@ -96,23 +108,30 @@ export const UserProvider = ({ children }) => {
       likes: 0,
     }
     try {
-      db.collection('comments').add({
+      await db.collection('comments').add({
         ...commentData,
         timestamp: firebase.firestore.Timestamp.now(),
       })
+      queryComments(word.id)
     } catch (e) {
       console.error(e)
       console.log('messed up in addComment query')
     }
   }
 
-  const addLike = async commentId => {
-    await db
-      .collection('comments')
-      .doc(`${commentId}`)
-      .update({
-        likes: firebase.firestore.FieldValue.increment(1),
-      })
+  const addLike = async (commentId, curWordId) => {
+    try {
+      await db
+        .collection('comments')
+        .doc(`${commentId}`)
+        .update({
+          likes: firebase.firestore.FieldValue.increment(1),
+        })
+      await queryComments(curWordId)
+    } catch (e) {
+      console.error(e)
+      console.log('messed up in addLike')
+    }
   }
 
   return (
@@ -134,6 +153,8 @@ export const UserProvider = ({ children }) => {
         friendWords,
         queryWords,
         addWord,
+        curComments,
+        queryComments,
         addComment,
         addLike,
       }}

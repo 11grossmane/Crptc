@@ -39,10 +39,10 @@ const FriendWords = ({ navigation }) => {
   const onSnap = ind => {
     try {
       console.log(ind)
-      if (friendWords[ind] && friendWords[ind].comments) {
+      if (friendWords.length) {
         setCurWord(friendWords[ind])
-        setFriendWordComments(friendWords[ind].comments)
       }
+      console.log('TCL: wordComments', wordComments)
     } catch (e) {
       console.error(e)
     }
@@ -97,9 +97,12 @@ const FriendWords = ({ navigation }) => {
               <ActivityIndicator size='large' />
             )}
           </View>
-          <CommentForm />
-          {friendWordComments && (
-            <CommentList comments={friendWordComments} userType='friend' />
+
+          {curWord === true && (
+            <>
+              <CommentForm />
+              <CommentList userType='friend' />
+            </>
           )}
         </ScrollView>
       </View>

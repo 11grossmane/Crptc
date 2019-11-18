@@ -3,13 +3,10 @@ import { Form, Item, Button, Label, Input, Text, Content } from 'native-base'
 import { KeyboardAvoidingView } from 'react-native'
 import UserContext from '../context/UserContext'
 const CommentForm = props => {
-  const { curUser, curFriend, curWord, queryWords, addComment } = useContext(
-    UserContext
-  )
+  const { curUser, curFriend, curWord, addComment } = useContext(UserContext)
   const [newComment, setNewComment] = useState('')
   const submitComment = async () => {
     await addComment(newComment, curUser, curWord)
-    await queryWords(curFriend)
     setNewComment('')
   }
   return (
