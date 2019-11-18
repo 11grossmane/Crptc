@@ -67,7 +67,7 @@ const RecentWords = ({ navigation }) => {
     }
 
     //return allWordsListener()
-  }, [curUser.id])
+  }, [])
 
   const onSnap = async ind => {
     try {

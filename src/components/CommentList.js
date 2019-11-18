@@ -28,18 +28,9 @@ const CommentList = ({ comments, userType }) => {
     curWord,
     curFriend,
   } = useContext(UserContext)
-  const [accorComs, setAccorComs] = useState([])
-  const [localComments, setLocalComments] = useState([])
+
   const wordsToWatch = userType === 'curUser' ? userWords : friendWords
-  useEffect(() => {
-    // if (localComments.length) {
-    //   setAccorComs(accordionize(localComments))
-    // } else {
-    //   setAccorComs(accordionize(comments))
-    // }
-    setAccorComs()
-    console.log('word and comments', curWord, comments)
-  }, [comments, wordsToWatch])
+  const accorComs = accordionize(comments)
 
   const submitLike = async commentId => {
     await addLike(commentId)
@@ -48,7 +39,7 @@ const CommentList = ({ comments, userType }) => {
     else await queryWords(curFriend)
   }
 
-  if (!comments.length && !localComments.length) {
+  if (!comments.length || !accorComs.length) {
     console.log('no comments')
     return (
       <>

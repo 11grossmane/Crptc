@@ -50,8 +50,9 @@ const FriendWords = ({ navigation }) => {
 
   useEffect(() => {
     console.log(curFriend)
+
     setCurFriend(navigation.getParam('friend', 'No Friend'))
-    queryWords(curFriend)
+    queryWords(navigation.getParam('friend', 'No Friend'))
   }, [])
 
   if (!curFriend || !curFriend.id) {
