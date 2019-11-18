@@ -30,7 +30,7 @@ export const UserProvider = ({ children }) => {
     console.log('friendArray', friendsArray)
     setFriends(friendsArray)
   }
-  const queryComments = async id => {
+  const queryComments = async (id, returning = false) => {
     try {
       const comments = await db
         .collection('comments')
@@ -42,6 +42,7 @@ export const UserProvider = ({ children }) => {
         return { ...doc.data(), id: doc.id }
       })
       if (returning) {
+        console.log('returning updated', updated)
         return updated
       } else {
         setCurComments(updated)
@@ -66,18 +67,27 @@ export const UserProvider = ({ children }) => {
       const wordsPromiseArray = words.docs.map(async doc => {
         console.log('words dave', doc.id)
         const comArray = await queryComments(doc.id, true)
-        return { ...doc.data(), id: doc.id, comments: comArray || [] }
+        console.log('TCL: comArray', comArray)
+
+        return { ...doc.data(), id: doc.id, comments: comArray }
       })
 
       //use await promise.all to make sure they are resolved before setting user words
       const wordsArray = await Promise.all(wordsPromiseArray)
-      if (ind === 0) setCurWord(wordsArray[0])
-      console.log('wordsArray', wordsArray)
-      if (curUser.id === user.id) {
-        setUserWords(wordsArray)
-      } else {
-        setFriendWords(wordsArray)
+      if (ind === 0) {
+        setCurWord(wordsArray[0])
       }
+      console.log('curUser in side qerwords', curUser)
+      console.log('wordsArray', wordsArray)
+      if (wordsArray.length) {
+        if (curUser.id === user.id) {
+          await setUserWords([...wordsArray])
+        } else {
+          await setFriendWords([...wordsArray])
+        }
+      }
+      console.log('friendwords', friendWords, 'userWords', userWords)
+      return wordsArray
     } catch (e) {
       console.error(e)
     }
@@ -150,6 +160,7 @@ export const UserProvider = ({ children }) => {
         friends,
         queryFriends,
         userWords,
+        setUserWords,
         friendWords,
         queryWords,
         addWord,

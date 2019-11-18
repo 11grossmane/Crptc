@@ -7,12 +7,18 @@ import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
 import NativeHeader from '../components/NativeHeader'
 const FriendsList = ({ navigation }) => {
-  const { curUser, friends, queryFriends } = useContext(UserContext)
+  const { curUser, friends, queryFriends, setCurFriend } = useContext(
+    UserContext
+  )
 
   useEffect(() => {
+    const query = async () => {
+      await queryFriends()
+    }
+
     console.log('curUser and friends', curUser, curUser.friendIds)
     if (curUser.friendIds && curUser.friendIds.length && !friends.length) {
-      queryFriends()
+      query()
     }
   }, [])
 
@@ -26,6 +32,7 @@ const FriendsList = ({ navigation }) => {
                 <ListItem key={friend.id}>
                   <TouchableOpacity
                     onPress={() => {
+                      setCurFriend(friend)
                       navigation.navigate('FriendWords', {
                         friend: friend,
                       })

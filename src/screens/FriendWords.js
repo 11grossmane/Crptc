@@ -28,32 +28,55 @@ const FriendWords = ({ navigation }) => {
   const {
     queryWords,
     friendWords,
-    setCurWord,
-    curWord,
+
+    queryComments,
+    curComments,
     curFriend,
     setCurFriend,
   } = useContext(UserContext)
 
   const [friendWordComments, setFriendWordComments] = useState([])
-
-  const onSnap = ind => {
-    try {
-      console.log(ind)
-      if (friendWords.length) {
-        setCurWord(friendWords[ind])
-      }
-      console.log('TCL: wordComments', wordComments)
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const [curWord, setCurWord] = useState({})
 
   useEffect(() => {
     console.log(curFriend)
 
-    setCurFriend(navigation.getParam('friend', 'No Friend'))
-    queryWords(navigation.getParam('friend', 'No Friend'))
+    if (!curFriend) {
+      setCurFriend(navigation.getParam('friend', 'No Friend'))
+    } else {
+      const query = async () => {
+        await queryWords(curFriend)
+      }
+      query()
+    }
   }, [])
+  useEffect(() => {
+    if (friendWords.length) {
+      console.log(
+        'friendWordsinside hooks wathcing friendWords',
+        friendWords[0]
+      )
+      setCurWord(friendWords[0])
+
+      const query = async () => {
+        await queryComments(friendWords[0].id)
+      }
+      query()
+    }
+  }, [friendWords])
+  console.log('TCL: curWord in friend', curWord)
+  console.log('comments in freindwords', curComments)
+  const onSnap = async ind => {
+    try {
+      console.log(ind)
+      if (friendWords.length) {
+        setCurWord(friendWords[ind])
+        await queryComments(friendWords[ind].id)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   if (!curFriend || !curFriend.id) {
     return <ActivityIndicator size='large' />
@@ -98,10 +121,10 @@ const FriendWords = ({ navigation }) => {
             )}
           </View>
 
-          {curWord === true && (
+          {curWord && curWord.id && (
             <>
               <CommentForm />
-              <CommentList userType='friend' />
+              <CommentList userType='friend' curWord={curWord} />
             </>
           )}
         </ScrollView>

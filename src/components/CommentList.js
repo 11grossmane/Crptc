@@ -18,10 +18,8 @@ import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
 import NativeHeader from '../components/NativeHeader'
 import { accordionize } from '../utils/random'
-const CommentList = ({ comments, userType }) => {
-  const { addLike, curWord, queryComments, curComments } = useContext(
-    UserContext
-  )
+const CommentList = ({ curWord, userType }) => {
+  const { addLike, queryComments, curComments } = useContext(UserContext)
 
   // const wordsToWatch = userType === 'curUser' ? userWords : friendWords
 
@@ -30,7 +28,12 @@ const CommentList = ({ comments, userType }) => {
   }
 
   useEffect(() => {
-    queryComments(curWord.id)
+    const query = async () => {
+      await queryComments(curWord.id)
+    }
+    if (!curComments.length) {
+      query()
+    }
   }, [])
 
   if (!curComments.length) {

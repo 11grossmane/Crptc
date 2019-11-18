@@ -22,16 +22,21 @@ import styles from '../styles/index.style'
 import NativeHeader from '../components/NativeHeader'
 import WordForm from '../components/WordForm'
 import CommentList from '../components/CommentList'
+import FriendWords from './FriendWords'
 const RecentWords = ({ navigation }) => {
   const {
     curUser,
     setCurUser,
     userWords,
+    setUserWords,
+    curComments,
     queryWords,
+    queryComments,
     setCurFriend,
   } = useContext(UserContext)
 
   const [wordComments, setWordComments] = useState([])
+  const [curWord, setCurWord] = useState({})
 
   useEffect(() => {
     setCurFriend({})
@@ -42,20 +47,35 @@ const RecentWords = ({ navigation }) => {
       let userData = navigation.getParam('curUser', 'NONE')
       console.log('TCL: userData', userData)
       setCurUser(userData)
-      console.log('userWords', userWords)
+      console.log('userWords', userWords, 'friendwords', FriendWords)
     }
-    queryWords(curUser, 0)
-
+    const query = async () => {
+      if (curUser) {
+        await queryWords(curUser, 0)
+      }
+    }
+    query()
     //return allWordsListener()
-  }, [])
-
+  }, [curUser])
+  useEffect(() => {
+    if (userWords.length) {
+      console.log('userWordsinside hooks wathcing userWords', userWords[0])
+      setCurWord(userWords[0])
+      const query = async () => {
+        await queryComments(userWords[0].id)
+      }
+      query()
+    }
+  }, [userWords])
+  console.log('curWord in recente words', curWord)
+  console.log('curComments', curComments)
   const onSnap = async ind => {
     try {
       console.log(ind)
       if (userWords.length) {
         setCurWord(userWords[ind])
+        await queryComments(userWords[ind].id)
       }
-      console.log('TCL: wordComments', wordComments)
     } catch (e) {
       console.error(e)
     }
@@ -98,7 +118,9 @@ const RecentWords = ({ navigation }) => {
               />
             )}
           </View>
-          {curWord === true && <CommentList userType='curUser' />}
+          {curWord && curWord.id && (
+            <CommentList curWord={curWord} userType='curUser' />
+          )}
         </ScrollView>
       </View>
       <Foooter />
