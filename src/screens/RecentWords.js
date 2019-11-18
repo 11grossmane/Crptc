@@ -25,6 +25,8 @@ import CommentList from '../components/CommentList'
 import FriendWords from './FriendWords'
 const RecentWords = ({ navigation }) => {
   const {
+    curWord,
+    setCurWord,
     curUser,
     setCurUser,
     userWords,
@@ -36,7 +38,7 @@ const RecentWords = ({ navigation }) => {
   } = useContext(UserContext)
 
   const [wordComments, setWordComments] = useState([])
-  const [curWord, setCurWord] = useState({})
+  //const [curWord, setCurWord] = useState({})
 
   useEffect(() => {
     setCurFriend({})
@@ -47,22 +49,14 @@ const RecentWords = ({ navigation }) => {
 
       setCurUser(userData)
     }
-    const query = async () => {
-      if (curUser) {
-        await queryWords(curUser, 0)
-      }
-    }
-    query()
+    queryWords(curUser, 0)
     //return allWordsListener()
   }, [curUser])
   useEffect(() => {
     if (userWords.length) {
       console.log('userWordsinside hooks wathcing userWords', userWords[0])
       setCurWord(userWords[0])
-      const query = async () => {
-        await queryComments(userWords[0].id)
-      }
-      query()
+      queryComments(userWords[0].id)
     }
   }, [userWords])
   console.log('curWord in recente words', curWord)
@@ -72,7 +66,7 @@ const RecentWords = ({ navigation }) => {
       console.log(ind)
       if (userWords.length) {
         setCurWord(userWords[ind])
-        await queryComments(userWords[ind].id)
+        queryComments(userWords[ind].id)
       }
     } catch (e) {
       console.error(e)
@@ -105,7 +99,7 @@ const RecentWords = ({ navigation }) => {
                 renderItem={({ item }) => {
                   return <SliderEntry data={item} even={false} />
                 }}
-                onSnapToItem={onSnap}
+                onBeforeSnapToItem={onSnap}
                 //onLayout={onSnap}
                 sliderWidth={sliderWidth}
                 itemWidth={itemWidth}

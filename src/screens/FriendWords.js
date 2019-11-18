@@ -28,7 +28,8 @@ const FriendWords = ({ navigation }) => {
   const {
     queryWords,
     friendWords,
-
+    curWord,
+    setCurWord,
     queryComments,
     curComments,
     curFriend,
@@ -36,7 +37,6 @@ const FriendWords = ({ navigation }) => {
   } = useContext(UserContext)
 
   const [friendWordComments, setFriendWordComments] = useState([])
-  const [curWord, setCurWord] = useState({})
 
   useEffect(() => {
     console.log(curFriend)
@@ -44,12 +44,9 @@ const FriendWords = ({ navigation }) => {
     if (!curFriend) {
       setCurFriend(navigation.getParam('friend', 'No Friend'))
     } else {
-      const query = async () => {
-        await queryWords(curFriend)
-      }
-      query()
+      queryWords(curFriend)
     }
-  }, [])
+  }, [curFriend])
   useEffect(() => {
     if (friendWords.length) {
       console.log(
@@ -57,11 +54,7 @@ const FriendWords = ({ navigation }) => {
         friendWords[0]
       )
       setCurWord(friendWords[0])
-
-      const query = async () => {
-        await queryComments(friendWords[0].id)
-      }
-      query()
+      queryComments(friendWords[0].id)
     }
   }, [friendWords])
   console.log('TCL: curWord in friend', curWord)
@@ -71,7 +64,7 @@ const FriendWords = ({ navigation }) => {
       console.log(ind)
       if (friendWords.length) {
         setCurWord(friendWords[ind])
-        await queryComments(friendWords[ind].id)
+        queryComments(friendWords[ind].id)
       }
     } catch (e) {
       console.error(e)

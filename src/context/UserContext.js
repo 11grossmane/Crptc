@@ -8,7 +8,7 @@ const UserContext = React.createContext()
 export const UserProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [allWords, setAllWords] = useState([])
-  const [curWord, setCurWord] = useState('')
+  const [curWord, setCurWord] = useState({})
   const [curUser, setCurUser] = useState({})
   const [curFriend, setCurFriend] = useState({})
   const [friends, setFriends] = useState({})
@@ -25,8 +25,10 @@ export const UserProvider = ({ children }) => {
       console.log('one friend', friend.data())
       return { ...friend.data(), id: friend.id }
     })
+
     // eslint-disable-next-line no-undef
-    const friendsArray = await Promise.all(friends)
+    let friendsArray = await Promise.all(friends)
+    friendsArray = friendsArray.filter(cur => cur.id !== curUser.id)
     console.log('friendArray', friendsArray)
     setFriends(friendsArray)
   }
@@ -41,12 +43,8 @@ export const UserProvider = ({ children }) => {
         console.log('docs data', doc.data(), doc.id)
         return { ...doc.data(), id: doc.id }
       })
-      if (returning) {
-        console.log('returning updated', updated)
-        return updated
-      } else {
-        setCurComments(updated)
-      }
+
+      setCurComments(updated)
     } catch (e) {
       console.error(e)
       console.log('messed up in queryFriends')
@@ -64,19 +62,11 @@ export const UserProvider = ({ children }) => {
         .get()
 
       //call map to create an array of promises
-      const wordsPromiseArray = words.docs.map(async doc => {
-        console.log('words dave', doc.id)
-        const comArray = await queryComments(doc.id, true)
-        console.log('TCL: comArray', comArray)
-
-        return { ...doc.data(), id: doc.id, comments: comArray }
-      })
 
       //use await promise.all to make sure they are resolved before setting user words
-      const wordsArray = await Promise.all(wordsPromiseArray)
-      if (ind === 0) {
-        setCurWord(wordsArray[0])
-      }
+      const wordsArray = words.docs.map(doc => {
+        return { ...doc.data(), id: doc.id }
+      })
       console.log('curUser in side qerwords', curUser)
       console.log('wordsArray', wordsArray)
       if (wordsArray.length) {
