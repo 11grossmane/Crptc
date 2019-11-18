@@ -41,13 +41,11 @@ const RecentWords = ({ navigation }) => {
   useEffect(() => {
     setCurFriend({})
     if (curUser && curUser.id) {
-      console.log('TCL: curUser', curUser)
-      console.log('userWords', userWords)
+      console.log('curUser is:', curUser)
     } else {
       let userData = navigation.getParam('curUser', 'NONE')
-      console.log('TCL: userData', userData)
+
       setCurUser(userData)
-      console.log('userWords', userWords, 'friendwords', FriendWords)
     }
     const query = async () => {
       if (curUser) {

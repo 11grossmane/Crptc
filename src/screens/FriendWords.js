@@ -123,7 +123,7 @@ const FriendWords = ({ navigation }) => {
 
           {curWord && curWord.id && (
             <>
-              <CommentForm />
+              <CommentForm curWord={curWord} />
               <CommentList userType='friend' curWord={curWord} />
             </>
           )}
