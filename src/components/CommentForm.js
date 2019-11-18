@@ -17,7 +17,7 @@ const CommentForm = props => {
     <Content>
       <Form>
         <Text style={{ color: 'white' }}>
-          {curUser.name} is feeling {curWord.value} because...
+          {curFriend.name} is feeling {curWord.value} because...
         </Text>
         <Item fixedLabel>
           <Input

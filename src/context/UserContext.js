@@ -33,6 +33,7 @@ export const UserProvider = ({ children }) => {
     const comments = await db
       .collection('comments')
       .where('wordId', '==', id)
+      .orderBy('timestamp', 'desc')
       .get()
     return comments.docs.map(doc => {
       console.log('docs data', doc.data(), doc.id)

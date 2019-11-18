@@ -4,8 +4,7 @@ import firebase from 'firebase'
 import { Text } from 'react-native'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
-import SearchScreen from './src/screens/SearchScreen'
-import SingleRestScreen from './src/screens/SingleRestScreen'
+
 import Loading from './src/screens/Loading'
 import RecentWords from './src/screens/RecentWords'
 import LoginForm from './src/screens/LoginForm'
@@ -33,8 +32,7 @@ console.warn = message => {
 const navigator = createStackNavigator(
   {
     Loading: Loading,
-    Search: SearchScreen,
-    SingleRest: SingleRestScreen,
+
     RecentWords,
     LoginForm,
     FriendsList: {

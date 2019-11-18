@@ -16,7 +16,7 @@ import UserContext from '../context/UserContext'
 import Carousel from 'react-native-snap-carousel'
 
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style'
-import BusList from '../components/BusList'
+
 import SliderEntry from '../components/SliderEntry'
 import styles from '../styles/index.style'
 import { withNavigation } from 'react-navigation'

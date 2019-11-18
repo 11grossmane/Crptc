@@ -4,7 +4,7 @@ import useLoggedIn from '../hooks/useLoggedIn'
 import { app } from '../../firebase-config'
 import firebaseConfig from '../../firebase-config'
 import logger from 'use-reducer-logger'
-import { reducer, toggleLi } from '../store/reducer'
+
 import UserContext from '../context/UserContext'
 const Loading = props => {
   //const { loggedIn, setLoggedIn } = useLoggedIn()

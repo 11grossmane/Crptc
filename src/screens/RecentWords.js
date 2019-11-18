@@ -15,7 +15,7 @@ import UserContext from '../context/UserContext'
 import Carousel from 'react-native-snap-carousel'
 
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style'
-import BusList from '../components/BusList'
+
 import Foooter from '../components/Footer'
 import SliderEntry from '../components/SliderEntry'
 import styles from '../styles/index.style'
@@ -32,23 +32,6 @@ const RecentWords = ({ navigation }) => {
   } = useContext(UserContext)
 
   const [wordComments, setWordComments] = useState([])
-  //   const allWordsListener = async () => {
-  //     try {
-  //       let unsubscribe = await wordsRef.onSnapshot(snap => {
-  //         let arr = []
-  //         snap.forEach(doc => {
-  //           arr.push(doc.data())
-  //           console.log('TCL: doc.data()', doc.data())
-  //         })
-  //         setAllWords(arr)
-
-  //         console.log('TCL: allWords', allWords)
-  //       })
-  //       return unsubscribe && unsubscribe()
-  //     } catch (e) {
-  //       console.error(e)
-  //     }
-  //   }
 
   useEffect(() => {
     setCurFriend({})
