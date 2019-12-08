@@ -24,34 +24,33 @@ import Header from './src/components/header'
 YellowBox.ignoreWarnings(['Setting a timer'])
 const _console = clone(console)
 console.warn = message => {
-  if (message.indexOf('Setting a timer') <= -1) {
-    _console.warn(message)
-  }
+ if (message.indexOf('Setting a timer') <= -1) {
+  _console.warn(message)
+ }
 }
 
 const navigator = createStackNavigator(
-  {
-    Loading: Loading,
+ {
+  Loading: Loading,
 
-    RecentWords,
-    LoginForm,
-    FriendsList: {
-      screen: FriendsList,
-      navigationOptions: {
-        headerTitle: () => {
-          return <Header headerText='Friends' />
-        },
-      },
+  RecentWords,
+  LoginForm,
+  FriendsList: {
+   screen: FriendsList,
+   navigationOptions: {
+    headerTitle: () => {
+     return <Header headerText='Friends' />
     },
-    FriendWords,
-    Foooter,
+   },
   },
-  {
-    initialRouteName: 'Loading',
-    defaultNavigationOptions: {
-      title: 'Crptc',
-    },
-  }
+  FriendWords,
+  Foooter,
+ },
+ {
+  defaultNavigationOptions: {
+   title: 'Crptc',
+  },
+ }
 )
 // export const loadFont = async () => {
 //   await Font.loadAsync({
@@ -62,19 +61,19 @@ const navigator = createStackNavigator(
 // }
 const Navigation = createAppContainer(navigator)
 const App = () => {
-  const [loading, setLoading] = useState(true)
-  useEffect(() => {
-    loadFont().then(() => setLoading(false))
-  }, [])
-  return (
-    !loading && (
-      <UserProvider>
-        <Navigation>
-          <Foooter />
-        </Navigation>
-      </UserProvider>
-    )
+ const [loading, setLoading] = useState(true)
+ useEffect(() => {
+  loadFont().then(() => setLoading(false))
+ }, [])
+ return (
+  !loading && (
+   <UserProvider>
+    <Navigation>
+     <Foooter />
+    </Navigation>
+   </UserProvider>
   )
+ )
 }
 
 export default App
