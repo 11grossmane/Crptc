@@ -20,7 +20,8 @@ import { YellowBox } from 'react-native'
 import { loadFont } from './src/utils/random'
 import clone from 'lodash.clone'
 import Header from './src/components/header'
-
+import store from './src/context/store'
+import { Provider } from 'react-redux'
 YellowBox.ignoreWarnings(['Setting a timer'])
 const _console = clone(console)
 console.warn = message => {
@@ -67,11 +68,11 @@ const App = () => {
  }, [])
  return (
   !loading && (
-   <UserProvider>
+   <Provider store={store}>
     <Navigation>
      <Foooter />
     </Navigation>
-   </UserProvider>
+   </Provider>
   )
  )
 }

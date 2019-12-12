@@ -1,11 +1,9 @@
 import firebase from 'firebase'
 import { db } from '../../firebase-config'
 import { createStore, applyMiddleware, compose } from 'redux'
-import axios from 'axios'
-import appReducer from '.'
+
 import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'remote-redux-devtools'
-import thunkMiddleware from 'redux-thunk'
 
 const setLoggedIn = bool => {
  return { type: 'SETLOGGEDIN', bool }
@@ -196,7 +194,5 @@ const reducer = (state = initial, action) => {
  }
 }
 
-const middleware = composeWithDevTools(
- applyMiddleware(createLogger({ collapsed: true }))
-)
+const middleware = compose(applyMiddleware(createLogger({ collapsed: true })))
 export default createStore(reducer, middleware)
