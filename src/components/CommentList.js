@@ -101,9 +101,19 @@ const CommentList = ({
     {userType === 'user' ? (
      <Text style={{ color: 'black' }}>This word has no comments yet</Text>
     ) : (
-     <Text style={{ color: 'black' }}>
-      Be the first to comment on this word!
-     </Text>
+     <>
+      <Text style={{ color: 'black' }}>
+       Be the first to comment on this word!
+      </Text>
+      {userType === 'friend' && (
+       <CommentForm
+        // loading={props.loading}
+        // setLoading={props.setLoading}
+        curWord={myWord}
+        submitComment={submitComment}
+       />
+      )}
+     </>
     )}
    </View>
   )
