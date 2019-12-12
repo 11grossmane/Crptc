@@ -1,6 +1,12 @@
 import React, { useState, useContext } from 'react'
 import { app, db } from '../../firebase-config'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import {
+ View,
+ Text,
+ TextInput,
+ StyleSheet,
+ ImageBackground,
+} from 'react-native'
 import { Card, CardSection, Button, Spinner } from '../components/index'
 import { withNavigation } from 'react-navigation'
 
@@ -111,66 +117,88 @@ const LoginForm = ({ navigation, setCurUser }) => {
  //   )
  // }
  return (
-  <Card>
-   <CardSection>
-    <TextInput
-     style={styles.inputStyle}
-     autoCompleteType={'email'}
-     placeholder='User Name'
-     importantforAutofill={true}
-     autoCapitalize='none'
-     autoCorrect={false}
-     value={email}
-     onChangeText={val => setEmail(val)}
-    />
-   </CardSection>
-   <CardSection>
-    <TextInput
-     style={styles.inputStyle}
-     autoCompleteType={'password'}
-     importantforAutofill={true}
-     secureTextEntry={true}
-     placeholder='Password'
-     autoCapitalize='none'
-     autoCorrect={false}
-     value={password}
-     onChangeText={val => setPassword(val)}
-    />
-   </CardSection>
-   {error.length > 0 && (
-    <Text style={{ fontSize: 20, color: 'red' }}>{error}</Text>
-   )}
-   <CardSection>
-    {loading === true ? (
-     <Spinner />
-    ) : (
-     <Button color='blue' onPress={onButtonPress}>
-      Log in/Signup
-     </Button>
+  <ImageBackground
+   source={require('../../assets/crptc-icon.png')}
+   style={styles.image}
+  >
+   <Text style={{ color: 'white', fontSize: 50, alignSelf: 'center' }}>
+    Crptc
+   </Text>
+
+   <Card style={styles.backgroundStyle}>
+    <CardSection style={{ marginTop: 10 }}>
+     <TextInput
+      style={styles.inputStyle}
+      autoCompleteType={'email'}
+      placeholder='User Name'
+      importantforAutofill={true}
+      autoCapitalize='none'
+      autoCorrect={false}
+      value={email}
+      onChangeText={val => setEmail(val)}
+     />
+    </CardSection>
+    <CardSection>
+     <TextInput
+      style={styles.inputStyle}
+      autoCompleteType={'password'}
+      importantforAutofill={true}
+      secureTextEntry={true}
+      placeholder='Password'
+      autoCapitalize='none'
+      autoCorrect={false}
+      value={password}
+      onChangeText={val => setPassword(val)}
+     />
+    </CardSection>
+    {error.length > 0 && (
+     <Text style={{ fontSize: 20, color: 'red' }}>{error}</Text>
     )}
-    <Button color='red' onPress={onGoogleButtonPress}>
-     Log in with Google
-    </Button>
-   </CardSection>
-  </Card>
+    <CardSection>
+     {loading === true ? (
+      <Spinner />
+     ) : (
+      <Button color='blue' onPress={onButtonPress}>
+       Log in/Signup
+      </Button>
+     )}
+     <Button color='red' onPress={onGoogleButtonPress}>
+      Log in with Google
+     </Button>
+    </CardSection>
+   </Card>
+  </ImageBackground>
  )
 }
 
 const styles = StyleSheet.create({
+ image: {
+  //position: 'absolute',
+  flex: 1,
+  resizeMode: 'cover',
+  width: '100%',
+  height: '100%',
+  //alignItems: 'center',
+  justifyContent: 'center',
+ },
+
  backgroundStyle: {
   marginTop: 10,
   marginBottom: 1,
-  backgroundColor: '#F0EEEE',
+  backgroundColor: 'transparent',
   height: 50,
   borderRadius: 5,
   marginHorizontal: 15,
   flexDirection: 'row',
   // alignItems: 'center',//this would shrink the search bar and override flex property
   justifyContent: 'space-between',
+  opacity: 50,
  },
  inputStyle: {
   flex: 1,
   fontSize: 18,
+  color: 'darkslategray',
+  backgroundColor: 'transparent',
  },
  iconStyle: {
   fontSize: 35,
