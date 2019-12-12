@@ -16,10 +16,10 @@ const CommentForm = ({ curWord, setLoading }) => {
  const { curUser, curFriend, addComment } = useContext(UserContext)
  const [newComment, setNewComment] = useState('')
  const submitComment = async () => {
-  setLoading(true)
+  //setLoading(true)
   await addComment(newComment, curUser, curWord)
   setNewComment('')
-  setLoading(false)
+  //setLoading(false)
  }
  return (
   <>

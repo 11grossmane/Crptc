@@ -22,9 +22,14 @@ import styles from '../styles/index.style'
 import NativeHeader from '../components/NativeHeader'
 import WordForm from '../components/WordForm'
 import CommentList from '../components/CommentList'
+import CommentForm from '../components/CommentForm'
 import FriendWords from './FriendWords'
 const RecentWords = ({ navigation }) => {
  const {
+  queryWords,
+  friendWords,
+  curFriend,
+  setCurFriend,
   curWord,
   setCurWord,
   curUser,
@@ -32,53 +37,61 @@ const RecentWords = ({ navigation }) => {
   userWords,
   setUserWords,
   curComments,
-  queryWords,
   queryComments,
-  setCurFriend,
  } = useContext(UserContext)
-
+ let person, words, comments, setPerson
+ const isFriend = navigation.getParam('friend', false) ? true : false
+ if (isFriend) {
+  user = curFriend
+  words = userWords
+  setPerson = setCurFriend
+ } else {
+  user = curUser
+  words = userWords
+  setPerson = setCurUser
+ }
  const [wordComments, setWordComments] = useState([])
  //const [curWord, setCurWord] = useState({})
  const [loading, setLoading] = useState(true)
  useEffect(() => {
   setLoading(true)
-  setCurFriend({})
-  if (curUser && curUser.id) {
-   console.log('curUser is:', curUser)
+  if (user && user.id) {
+   console.log('user is:', user)
+   if (isFriend) queryWords(user).then(() => setLoading(false))
+   else queryWords(user).then(() => setLoading(false))
   } else {
-   let userData = navigation.getParam('curUser', 'NONE')
+   let userData = navigation.getParam('user', 'NONE')
+   if (isFriend) {
+    userData = navigation.getParam('friend', 'No Friend')
+   }
 
-   setCurUser(userData)
+   setPerson(userData)
   }
-  queryWords(curUser, 0).then(() => setLoading(false))
-
-  //return allWordsListener()
- }, [curUser])
+ }, [user])
  useEffect(() => {
-  if (userWords.length) {
+  if (words.length) {
    setLoading(true)
-   console.log('userWordsinside hooks wathcing userWords', userWords[0])
-   setCurWord(userWords[0])
-   queryComments(userWords[0].id).then(() => setLoading(false))
+   console.log('userWordsinside hooks wathcing words', words[0])
+   setCurWord(words[0])
+   queryComments(words[0].id).then(() => setLoading(false))
   }
- }, [userWords])
- console.log('curWord in recente words', curWord)
- console.log('curComments', curComments)
+ }, [words])
+ console.log('curWord in recent words', curWord)
+
  const onSnap = async ind => {
   try {
    setLoading(true)
    console.log(ind)
-   if (userWords.length) {
-    setCurWord(userWords[ind])
-    await queryComments(userWords[ind].id)
+   if (words.length) {
+    setCurWord(words[ind])
+    await queryComments(words[ind].id)
    }
    setLoading(false)
   } catch (e) {
    console.error(e)
   }
  }
- if (!curUser || !curUser.id || loading)
-  return <ActivityIndicator size='large' />
+ if (!user || !user.id || loading) return <ActivityIndicator size='large' />
 
  return (
   <View style={styles.safeArea}>
@@ -97,31 +110,40 @@ const RecentWords = ({ navigation }) => {
     >
      <View style={styles.exampleContainer}>
       <Text style={styles.subtitle}>My Words</Text>
-      <WordForm loading={loading} setLoading={setLoading} />
+      {navigation.getParam('friend', false) === false && (
+       <WordForm loading={loading} setLoading={setLoading} />
+      )}
       {/* <Text style={styles.subtitle}>Recent Words</Text> */}
-      {userWords.length > 0 && (
+      {words.length > 0 && (
        <Carousel
         ref={c => (this.carousel = c)}
-        data={userWords}
+        data={words}
         renderItem={({ item }) => {
-         return <SliderEntry loading={loading} data={item} even={false} />
+         console.log('item inside carousel', item)
+         return (
+          <React.Fragment>
+           <SliderEntry
+            loading={loading}
+            setLoading={setLoading}
+            data={item}
+            user={user}
+            even={false}
+            userType={navigation.getParam('friend') ? 'friend' : 'user'}
+           />
+          </React.Fragment>
+         )
         }}
-        onBeforeSnapToItem={onSnap}
+        //onBeforeSnapToItem={onSnap}
         //onLayout={onSnap}
         sliderWidth={sliderWidth}
         itemWidth={itemWidth}
         containerCustomStyle={styles.slider}
         contentContainerCustomStyle={styles.sliderContentContainer}
-        layout={'tinder'}
+        layout={'stack'}
         loop={true}
        />
       )}
      </View>
-     {curWord && curWord.id && !loading ? (
-      <CommentList curWord={curWord} userType='curUser' />
-     ) : (
-      <ActivityIndicator size='large' />
-     )}
     </ScrollView>
    </View>
    <Foooter />
