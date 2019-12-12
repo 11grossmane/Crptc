@@ -1,6 +1,7 @@
 import React, { Component, useState, useContext, useEffect } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, ScrollView } from 'react-native'
 import { View } from 'react-native'
+import { db } from '../../firebase-config'
 import {
  Container,
  Header,
@@ -13,25 +14,37 @@ import {
  Icon,
 } from 'native-base'
 import { SingleWordContext } from '../context/UserContext'
-import { db } from '../../firebase-config'
+
 import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
 import NativeHeader from '../components/NativeHeader'
 import { accordionize } from '../utils/random'
-import { addLike, setSingleWord, singleWord } from '../context/store'
+import {
+ addLike,
+ setSingleWord,
+ singleWord,
+ addComment,
+} from '../context/store'
 import { connect } from 'react-redux'
+import CommentForm from '../components/CommentForm'
+
 const CommentList = ({
  user,
  curWord,
  userType,
  curComments,
  addLike,
+ addComment,
  setSingleWord,
  singleWord,
+ navigation,
 }) => {
  // const wordsToWatch = userType === 'curUser' ? userWords : friendWords
  const [myWord, setMyWord] = useState({ curWord })
  const submitLike = async commentId => {
+  // if (!commentId) {
+  //  queried = await db.collection('comments').where('value','==','')
+  // }
   await addLike(commentId, curWord.id)
   setMyWord(w => {
    const newComs = w.comments.map(cur => {
@@ -44,6 +57,28 @@ const CommentList = ({
    const updated = { ...w, comments: newComs }
    return updated
   })
+ }
+ const submitComment = async comment => {
+  const word = await addComment(comment, user, myWord)
+  // setMyWord(w => {
+  //  const commentData = {
+  //   value: comment,
+  //   userId: user.id,
+  //   wordId: `${myWord.id}`,
+  //   likes: 0,
+  //   timestamp: new Date(),
+  //  }
+  //  const newComs = [commentData, ...w.comments]
+  //  const updated = { ...w, comments: newComs }
+  //  return updated
+  // })
+  setMyWord(word)
+ }
+ if (navigation.getParam('curWord')) {
+  curWord = navigation.getParam('curWord')
+  curComments = navigation.getParam('curComments')
+  user = navigation.getParam('user')
+  userType = navigation.getParam('userType')
  }
  useEffect(() => {
   if (!myWord.id) {
@@ -78,7 +113,14 @@ const CommentList = ({
  return (
   !!myWord.id && (
    <>
-    {console.log('here')}
+    {userType === 'friend' && (
+     <CommentForm
+      // loading={props.loading}
+      // setLoading={props.setLoading}
+      curWord={myWord}
+      submitComment={submitComment}
+     />
+    )}
     <Text style={{ color: 'white' }}>People said...</Text>
     {myWord.comments.length && (
      <Accordion
@@ -118,7 +160,9 @@ const textStyle = {
 }
 
 export default withNavigation(
- connect(({ singleWord }) => ({ singleWord }), { setSingleWord, addLike })(
-  CommentList
- )
+ connect(({ singleWord, user }) => ({ singleWord, user }), {
+  setSingleWord,
+  addLike,
+  addComment,
+ })(CommentList)
 )

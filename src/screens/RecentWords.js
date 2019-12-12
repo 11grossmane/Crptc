@@ -117,7 +117,7 @@ const RecentWords = ({
         data={words}
         renderItem={({ item }) => {
          return (
-          <React.Fragment>
+          <ScrollView>
            <SliderEntry
             loading={loading}
             setLoading={setLoading}
@@ -126,7 +126,7 @@ const RecentWords = ({
             even={false}
             userType={isFriend ? 'friend' : 'user'}
            />
-          </React.Fragment>
+          </ScrollView>
          )
         }}
         //onBeforeSnapToItem={onSnap}

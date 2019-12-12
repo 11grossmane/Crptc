@@ -25,12 +25,13 @@ const FriendsList = ({
    query()
   }
  }, [])
-
+ console.log('friends in list', friends)
  return (
   <Container style={{ backgroundColor: 'black' }}>
    <Content style={{ backgroundColor: 'black' }}>
     <List style={{ backgroundColor: 'black' }}>
-     {friends.length &&
+     {!!friends &&
+      !!friends.length &&
       friends.map(friend => {
        return (
         <ListItem key={friend.id}>

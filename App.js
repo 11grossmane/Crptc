@@ -22,6 +22,7 @@ import clone from 'lodash.clone'
 import Header from './src/components/header'
 import store from './src/context/store'
 import { Provider } from 'react-redux'
+import CommentList from './src/components/CommentList'
 YellowBox.ignoreWarnings(['Setting a timer'])
 const _console = clone(console)
 console.warn = message => {
@@ -36,6 +37,7 @@ const navigator = createStackNavigator(
 
   RecentWords,
   LoginForm,
+  CommentList,
   FriendsList: {
    screen: FriendsList,
    navigationOptions: {

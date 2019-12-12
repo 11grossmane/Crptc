@@ -12,7 +12,7 @@ export const setUserWords = words => {
  return { type: SETUSERWORDS, words: words }
 }
 export const setFriends = friends => {
- return { type: 'SETFRIENDS' }
+ return { type: 'SETFRIENDS', friends }
 }
 export const setCurUser = user => {
  return { type: 'SETCURUSER', user }
@@ -43,20 +43,21 @@ export const addLike = (commentId, curWordId) => {
   }
  }
 }
-export const querySingleWord = id => {
+export const querySingleWord = (id, returning) => {
  return async dispatch => {
   try {
    const word = await db
     .collection('words')
     .doc(`${id}`)
     .get()
-   const comments = await queryComments(id, true)
+   const comments = await queryComments(id, true)()
    console.log('comments inside querysingle word')
    const data = {
     ...word.data(),
     id: word.id,
     comments: comments,
    }
+   if (returning) return data
    dispatch(setSingleWord(data))
   } catch (error) {
    console.error('messed up in querySingleWord: ', error)
@@ -95,7 +96,10 @@ export const addComment = (com, user, word) => {
     ...commentData,
     timestamp: firebase.firestore.Timestamp.now(),
    })
-   queryComments(word.id)
+   console.log('wprd inside addcomen', word)
+   const newWord = await querySingleWord(word.id, true)()
+   console.log('newWord inside addcomen', newWord)
+   return newWord
   } catch (e) {
    console.error(e)
    console.log('messed up in addComment query')
