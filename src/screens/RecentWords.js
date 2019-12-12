@@ -109,9 +109,7 @@ const RecentWords = ({
     >
      <View style={styles.exampleContainer}>
       <Text style={styles.subtitle}>My Words</Text>
-      {isFriend === false && (
-       <WordForm loading={loading} setLoading={setLoading} />
-      )}
+      {isFriend === false && <WordForm />}
       {/* <Text style={styles.subtitle}>Recent Words</Text> */}
       {words.length > 0 && (
        <Carousel

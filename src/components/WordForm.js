@@ -3,16 +3,23 @@ import { Form, Item, Button, Label, Input, Text } from 'native-base'
 import UserContext from '../context/UserContext'
 import { queryWords, addWord } from '../context/store'
 import { connect } from 'react-redux'
+import Spinner from '../components/Spinner'
 const WordForm = props => {
  const [newWord, setNewWord] = useState('')
+ const [loading, setLoading] = useState(false)
  const submitWord = async () => {
-  props.setLoading(true)
-  props.addWord(newWord, props.user)
-  await props.queryWords(props.user)
+  setLoading(true)
+  await props.addWord(newWord, props.user)
   //setCurWord(newWord)
   setNewWord('')
-  props.setLoading(false)
+  setLoading(false)
  }
+ if (loading)
+  return (
+   <>
+    <Spinner />
+   </>
+  )
  return (
   <Form>
    <Item fixedLabel>

@@ -73,6 +73,7 @@ export const addWord = (newWord, user) => {
    await db
     .collection('words')
     .add({ ...newWordData, timestamp: firebase.firestore.Timestamp.now() })
+   await dispatch(await queryWords(user))
   } catch (e) {
    console.error(e)
    console.log('messed up in addWord query')
