@@ -18,20 +18,22 @@ import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
 import NativeHeader from '../components/NativeHeader'
 import { accordionize } from '../utils/random'
-const CommentList = ({ user, curWord, userType, curComments }) => {
- const { addLike, singleWord, setSingleWord } = useContext(SingleWordContext)
-
+import { addLike, setSingleWord, singleWord } from '../context/store'
+const CommentList = ({
+ user,
+ curWord,
+ userType,
+ curComments,
+ addLike,
+ setSingleWord,
+ singleWord,
+}) => {
  // const wordsToWatch = userType === 'curUser' ? userWords : friendWords
 
  const submitLike = async commentId => {
   await addLike(commentId, curWord.id)
  }
- useEffect(() => {
-  setSingleWord(curWord)
- }, [])
- console.log('single word', curWord)
- console.log('curWord after curWord', curWord)
-
+ useEffect(() => {}, [])
  // useEffect(() => {
  //   const query = async () => {
  //     await queryComments(curWord.id)
@@ -97,4 +99,8 @@ const textStyle = {
  fontStyle: 'italic',
 }
 
-export default withNavigation(CommentList)
+export default withNavigation(
+ connect(({ singleWord }) => ({ singleWord }), { setSingleWord, addLike })(
+  CommentList
+ )
+)

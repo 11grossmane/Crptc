@@ -32,8 +32,8 @@ export const SingleWordProvider = ({ children }) => {
    const comments = await queryComments(id, true)
    console.log('comments inside querysingle word')
    const data = {
-    ...doc.data(),
-    id: doc.id,
+    ...word.data(),
+    id: word.id,
     comments: comments,
    }
    setSingleWord(data)

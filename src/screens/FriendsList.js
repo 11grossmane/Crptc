@@ -6,18 +6,22 @@ import { db } from '../../firebase-config'
 import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
 import NativeHeader from '../components/NativeHeader'
-const FriendsList = ({ navigation }) => {
- const { curUser, friends, queryFriends, setCurFriend } = useContext(
-  UserContext
- )
-
+import connect from 'react-redux'
+import { queryFriends, setCurFriend } from '../context/store'
+const FriendsList = ({
+ navigation,
+ user,
+ friends,
+ queryFriends,
+ setCurFriend,
+}) => {
  useEffect(() => {
   const query = async () => {
-   await queryFriends()
+   await queryFriends(user)
   }
 
-  console.log('curUser and friends', curUser, curUser.friendIds)
-  if (curUser.friendIds && curUser.friendIds.length && !friends.length) {
+  console.log('user and friends', user, user.friendIds)
+  if (user.friendIds && user.friendIds.length && !friends.length) {
    query()
   }
  }, [])
@@ -50,4 +54,9 @@ const FriendsList = ({ navigation }) => {
  )
 }
 
-export default withNavigation(FriendsList)
+export default withNavigation(
+ connect(({ user, friends }) => ({ user, friends }), {
+  queryFriends,
+  setCurFriend,
+ })(FriendsList)
+)
