@@ -63,7 +63,7 @@ const CommentList = ({
   console.log('no comments')
   return (
    <View>
-    {userType === 'curUser' ? (
+    {userType === 'user' ? (
      <Text style={{ color: 'black' }}>This word has no comments yet</Text>
     ) : (
      <Text style={{ color: 'black' }}>
@@ -73,12 +73,14 @@ const CommentList = ({
    </View>
   )
  }
+ if (myWord.id) console.log('myComs', myWord.id, accordionize(myWord.comments))
 
  return (
-  myWord.id === true && (
+  !!myWord.id && (
    <>
+    {console.log('here')}
     <Text style={{ color: 'white' }}>People said...</Text>
-    {myWord.comments && (
+    {myWord.comments.length && (
      <Accordion
       style={{ padding: 5 }}
       dataArray={accordionize(myWord.comments)}
@@ -86,7 +88,7 @@ const CommentList = ({
        console.log('item in accordion', item)
        return (
         <View style={textStyle}>
-         <Text style={textStyle}>{item.content.value}</Text>
+         <Text style={textStyle}>{item.content.title}</Text>
          <Text style={textStyle}>Likes: {item.content.likes}</Text>
          <Button
           onPress={() => {
@@ -101,7 +103,6 @@ const CommentList = ({
         </View>
        )
       }}
-      onAccordionOpen
      ></Accordion>
     )}
    </>
@@ -111,6 +112,7 @@ const CommentList = ({
 
 const textStyle = {
  backgroundColor: '#e3f1f1',
+ color: 'black',
  padding: 10,
  fontStyle: 'italic',
 }

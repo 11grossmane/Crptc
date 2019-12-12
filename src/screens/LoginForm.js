@@ -82,11 +82,9 @@ const LoginForm = ({ navigation, setCurUser }) => {
    // setLoading(false)
    // setLoggedIn(true)
    // setError('')
-   const resetAction = StackActions.reset({
-    index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'RecentWords' })],
-   })
-   navigation.dispatch(resetAction)
+
+   navigation.navigate({ routeName: 'RecentWords' })
+
    //  navigation.navigate('RecentWords', {
    //   curUser: {
    //    ...snapData,

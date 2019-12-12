@@ -48,6 +48,7 @@ const navigator = createStackNavigator(
   Foooter,
  },
  {
+  initialRouteName: 'RecentWords',
   defaultNavigationOptions: {
    title: 'Crptc',
   },

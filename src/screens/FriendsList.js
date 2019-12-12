@@ -6,7 +6,7 @@ import { db } from '../../firebase-config'
 import { withNavigation } from 'react-navigation'
 import Foooter from '../components/Footer'
 import NativeHeader from '../components/NativeHeader'
-import connect from 'react-redux'
+import { connect } from 'react-redux'
 import { queryFriends, setCurFriend } from '../context/store'
 const FriendsList = ({
  navigation,

@@ -36,11 +36,8 @@ const RecentWords = ({
  setCurFriend,
  setCurUser,
  user,
- friends,
  friend,
  words,
- setSingleWord,
- singleWord,
 }) => {
  let person, comments, setPerson
  const isFriend = navigation.getParam('friend', false) ? true : false
@@ -69,16 +66,16 @@ const RecentWords = ({
 
    setPerson(userData)
   }
- }, [person])
- useEffect(() => {
-  // if (words.length) {
-  //  setLoading(true)
-  //  console.log('personWordsinside hooks wathcing words', words[0])
-  //  setSingleWord(words[0])
-  //  queryComments(words[0].id).then(() => setLoading(false))
-  // }
- }, [words])
- console.log('singleWord in recent words', singleWord)
+ }, [])
+ // useEffect(() => {
+ //  // if (words.length) {
+ //  //  setLoading(true)
+ //  //  console.log('personWordsinside hooks wathcing words', words[0])
+ //  //  setSingleWord(words[0])
+ //  //  queryComments(words[0].id).then(() => setLoading(false))
+ //  // }
+ // }, [words])
+ console.log('words in recent words', words)
 
  // const onSnap = async ind => {
  //  try {
@@ -121,7 +118,6 @@ const RecentWords = ({
         ref={c => (this.carousel = c)}
         data={words}
         renderItem={({ item }) => {
-         console.log('item inside carousel', item)
          return (
           <React.Fragment>
            <SliderEntry
