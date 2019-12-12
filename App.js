@@ -50,7 +50,7 @@ const navigator = createStackNavigator(
   Foooter,
  },
  {
-  initialRouteName: 'RecentWords',
+  initialRouteName: 'LoginForm',
   defaultNavigationOptions: {
    title: 'Crptc',
   },

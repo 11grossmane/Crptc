@@ -178,16 +178,17 @@ export const queryWords = user => {
 }
 const initial = {
  user: {
-  email: 'brigitte.maggio@gmail.com',
-  friendIds: [
-   'annetta.hagenes60-voluptatem',
-   'jordyn.williamson-molestiae',
-   'jacey20-in',
-   'brigitte.maggio-illo',
-  ],
-  id: 'brigitte.maggio-illo',
-  name: 'brigitte.maggio-illo',
-  password: 'yolo123',
+  //test user
+  // email: 'brigitte.maggio@gmail.com',
+  // friendIds: [
+  //  'annetta.hagenes60-voluptatem',
+  //  'jordyn.williamson-molestiae',
+  //  'jacey20-in',
+  //  'brigitte.maggio-illo',
+  // ],
+  // id: 'brigitte.maggio-illo',
+  // name: 'brigitte.maggio-illo',
+  // password: 'yolo123',
  },
  words: [],
  friends: [],
