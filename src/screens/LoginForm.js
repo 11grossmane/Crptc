@@ -7,8 +7,9 @@ import { withNavigation } from 'react-navigation'
 import UserContext from '../context/UserContext'
 import * as Google from 'expo-google-app-auth'
 import { NavigationActions, StackActions } from 'react-navigation'
-const LoginForm = ({ navigation }) => {
- const { setCurUser } = useContext(UserContext)
+import { setCurUser } from '../context/store'
+import { connect } from 'react-redux'
+const LoginForm = ({ navigation, setCurUser }) => {
  //local state below because form
  const [email, setEmail] = useState('brigitte.maggio@gmail.com')
  const [password, setPassword] = useState('yolo123')
@@ -180,4 +181,4 @@ const styles = StyleSheet.create({
  },
 })
 
-export default withNavigation(LoginForm)
+export default withNavigation(connect(null, { setCurUser })(LoginForm))

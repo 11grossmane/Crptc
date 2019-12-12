@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react'
 import { Form, Item, Button, Label, Input, Text } from 'native-base'
 import UserContext from '../context/UserContext'
+import { queryWords, addWord } from '../context/store'
+import { connect } from 'react-redux'
 const WordForm = props => {
- const { curUser, queryWords, addWord, setCurWord } = useContext(UserContext)
  const [newWord, setNewWord] = useState('')
  const submitWord = async () => {
   props.setLoading(true)
-  addWord(newWord, curUser)
-  await queryWords(curUser)
+  props.addWord(newWord, props.user)
+  await props.queryWords(props.user)
   //setCurWord(newWord)
   setNewWord('')
   props.setLoading(false)
@@ -35,4 +36,6 @@ const WordForm = props => {
  )
 }
 
-export default WordForm
+export default connect(({ user }) => ({ user }), { addWord, queryWords })(
+ WordForm
+)

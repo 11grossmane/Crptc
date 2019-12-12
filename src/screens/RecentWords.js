@@ -60,8 +60,7 @@ const RecentWords = ({
   setLoading(true)
   if (person && person.id) {
    console.log('person is:', person)
-   if (isFriend) queryWords(person).then(() => setLoading(false))
-   else queryWords(person).then(() => setLoading(false))
+   queryWords(person).then(() => setLoading(false))
   } else {
    let userData = navigation.getParam('user', 'NONE')
    if (isFriend) {
@@ -72,28 +71,28 @@ const RecentWords = ({
   }
  }, [person])
  useEffect(() => {
-  if (words.length) {
-   setLoading(true)
-   console.log('personWordsinside hooks wathcing words', words[0])
-   setSingleWord(words[0])
-   queryComments(words[0].id).then(() => setLoading(false))
-  }
+  // if (words.length) {
+  //  setLoading(true)
+  //  console.log('personWordsinside hooks wathcing words', words[0])
+  //  setSingleWord(words[0])
+  //  queryComments(words[0].id).then(() => setLoading(false))
+  // }
  }, [words])
  console.log('singleWord in recent words', singleWord)
 
- const onSnap = async ind => {
-  try {
-   setLoading(true)
-   console.log(ind)
-   if (words.length) {
-    setSingleWord(words[ind])
-    await queryComments(words[ind].id)
-   }
-   setLoading(false)
-  } catch (e) {
-   console.error(e)
-  }
- }
+ // const onSnap = async ind => {
+ //  try {
+ //   setLoading(true)
+ //   console.log(ind)
+ //   if (words.length) {
+ //    setSingleWord(words[ind])
+ //    await queryComments(words[ind].id)
+ //   }
+ //   setLoading(false)
+ //  } catch (e) {
+ //   console.error(e)
+ //  }
+ // }
  if (!person || !person.id || loading) return <ActivityIndicator size='large' />
 
  return (
@@ -113,7 +112,7 @@ const RecentWords = ({
     >
      <View style={styles.exampleContainer}>
       <Text style={styles.subtitle}>My Words</Text>
-      {navigation.getParam('friend', false) === false && (
+      {isFriend === false && (
        <WordForm loading={loading} setLoading={setLoading} />
       )}
       {/* <Text style={styles.subtitle}>Recent Words</Text> */}
@@ -131,7 +130,7 @@ const RecentWords = ({
             data={item}
             user={person}
             even={false}
-            userType={navigation.getParam('friend') ? 'friend' : 'user'}
+            userType={isFriend ? 'friend' : 'user'}
            />
           </React.Fragment>
          )

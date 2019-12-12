@@ -7,8 +7,8 @@ import { createLogger } from 'redux-logger'
 import { composeWithDevTools } from 'remote-redux-devtools'
 import thunkMiddleware from 'redux-thunk'
 
-const setLoggedIn = user => {
- return { type: 'SETLOGGEDIN', user }
+const setLoggedIn = bool => {
+ return { type: 'SETLOGGEDIN', bool }
 }
 export const setUserWords = words => {
  return { type: 'SETUSERWORDS', words }
@@ -175,7 +175,7 @@ const initial = {
 const reducer = (state = initial, action) => {
  switch (action.type) {
   case 'SETLOGGEDIN':
-   return { ...state, user: action.user }
+   return { ...state, loggedIn: action.bool }
 
   case 'SETUSERWORDS':
    return { ...state, words: action.words }

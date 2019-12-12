@@ -19,6 +19,7 @@ import Foooter from '../components/Footer'
 import NativeHeader from '../components/NativeHeader'
 import { accordionize } from '../utils/random'
 import { addLike, setSingleWord, singleWord } from '../context/store'
+import { connect } from 'react-redux'
 const CommentList = ({
  user,
  curWord,
@@ -29,11 +30,26 @@ const CommentList = ({
  singleWord,
 }) => {
  // const wordsToWatch = userType === 'curUser' ? userWords : friendWords
-
+ const [myWord, setMyWord] = useState({ curWord })
  const submitLike = async commentId => {
   await addLike(commentId, curWord.id)
+  setMyWord(w => {
+   const newComs = w.comments.map(cur => {
+    if (cur.id === commentId) {
+     cur.likes++
+     return cur
+    }
+    return cur
+   })
+   const updated = { ...w, comments: newComs }
+   return updated
+  })
  }
- useEffect(() => {}, [])
+ useEffect(() => {
+  if (!myWord.id) {
+   setMyWord(curWord)
+  }
+ }, [])
  // useEffect(() => {
  //   const query = async () => {
  //     await queryComments(curWord.id)
@@ -43,7 +59,7 @@ const CommentList = ({
  //   }
  // }, [])
 
- if (curWord.id && !curWord.comments.length) {
+ if (myWord.id && !myWord.comments.length) {
   console.log('no comments')
   return (
    <View>
@@ -59,13 +75,13 @@ const CommentList = ({
  }
 
  return (
-  curWord.id === true && (
+  myWord.id === true && (
    <>
     <Text style={{ color: 'white' }}>People said...</Text>
-    {curWord.comments && (
+    {myWord.comments && (
      <Accordion
       style={{ padding: 5 }}
-      dataArray={accordionize(curWord.comments)}
+      dataArray={accordionize(myWord.comments)}
       renderContent={item => {
        console.log('item in accordion', item)
        return (

@@ -11,13 +11,13 @@ import {
 } from 'native-base'
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import UserContext from '../context/UserContext'
-
-const CommentForm = ({ curWord, setLoading }) => {
- const { curUser, curFriend, addComment } = useContext(UserContext)
+import { addComment } from '../context/store'
+import { connect } from 'react-redux'
+const CommentForm = ({ curWord, user, friend, addComment }) => {
  const [newComment, setNewComment] = useState('')
  const submitComment = async () => {
   //setLoading(true)
-  await addComment(newComment, curUser, curWord)
+  await addComment(newComment, user, curWord)
   setNewComment('')
   //setLoading(false)
  }
@@ -26,7 +26,7 @@ const CommentForm = ({ curWord, setLoading }) => {
    <ScrollView>
     <Form>
      <Text style={{ color: 'white' }}>
-      {curFriend.name} is feeling {curWord.value} because...
+      {friend.name} is feeling {curWord.value} because...
      </Text>
      <Item fixedLabel>
       <Input
@@ -51,4 +51,6 @@ const CommentForm = ({ curWord, setLoading }) => {
  )
 }
 
-export default CommentForm
+export default connect(({ user, friend }) => ({ user, friend }), {
+ addComment,
+})(CommentForm)
