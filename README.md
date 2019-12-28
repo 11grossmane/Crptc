@@ -8,6 +8,7 @@ Crptc is a social media mobile application that encourages humor and creativity.
 ![](assets/sc1.png=50)![](assets/sc2.png)![](assets/sc3.png)![](assets/sc4.png)
 =======
 # Screenshots
+the screenshots below take you through the basic user flow of Crptc.  User logs in, adds a word, scrolls through friends' words, adds comments and likes.  Repeat!
 
 <img src="assets/sc1.png" height= "auto" width="200"/> <img src="assets/sc2.png" height= "auto" width="200"/> <img src="assets/sc3.png" height= "auto" width="200"/> <img src="assets/sc4.png" height= "auto" width="200"/>
 
