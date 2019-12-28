@@ -137,11 +137,11 @@ const CommentList = ({
       style={{ padding: 5 }}
       dataArray={accordionize(myWord.comments)}
       renderContent={item => {
-       console.log('item in accordion', item)
        return (
         <View style={textStyle}>
          <Text style={textStyle}>{item.content.title}</Text>
          <Text style={textStyle}>Likes: {item.content.likes}</Text>
+         <Text style={textStyle}>Likes: {item.content.value}</Text>
          <Button
           onPress={() => {
            submitLike(item.content.id)

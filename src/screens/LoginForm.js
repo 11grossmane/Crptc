@@ -118,7 +118,7 @@ const LoginForm = ({ navigation, setCurUser }) => {
  // }
  return (
   <ImageBackground
-   source={require('../../assets/crptc-icon.png')}
+   source={require('../../assets/crptc-icon-full.png')}
    style={styles.image}
   >
    <Text style={{ color: 'white', fontSize: 50, alignSelf: 'center' }}>

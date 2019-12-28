@@ -36,7 +36,7 @@ const CommentForm = ({ curWord, user, friend, addComment, submitComment }) => {
        value={newComment}
        onChangeText={val => setNewComment(val)}
       />
-      <KeyboardAvoidingView behavior='padding' />
+
       <Button
        onPress={() => {
         submitComment(newComment)
@@ -48,6 +48,7 @@ const CommentForm = ({ curWord, user, friend, addComment, submitComment }) => {
      </Item>
     </Form>
    </ScrollView>
+   <KeyboardAvoidingView behavior='padding' />
   </>
  )
 }
