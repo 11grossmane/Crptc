@@ -6,7 +6,7 @@ Crptc is a social media mobile application that encourages humor and creativity.
 
 <img src="https://www.github.com/11grossmane/Crptc/assets/sc1.png" width="48"/>
 
-<img src="https://www.github.com/11grossmane/Crptc/assets/sc1.png" height= "100" width="48"/>
+<img src="assets/sc1.png" height= "100" width="48"/>
 
 ![](assets/sc1.png =50)
 ![](assets/sc2.png =20x35)
