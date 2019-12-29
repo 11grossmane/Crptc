@@ -1,4 +1,4 @@
-# Crptc
+# Crptc (3 day Hackathon)
 
 ![crptc logo](assets/crptc-icon-cr.jpg)
 
